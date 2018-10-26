@@ -1,0 +1,641 @@
+<!DOCTYPE html>
+<html>
+  <head><meta name="generator" content="Hexo 3.8.0">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+  <meta name="description" content="yanm1ng&#39;s blog">
+  <meta name="keyword" content="hexo-theme, vuejs">
+  
+    <link rel="shortcut icon" href="/css/images/logo.png">
+  
+  <title>
+    
+      Marvin Liu
+    
+  </title>
+  <link href="//cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+  <link href="//cdn.bootcss.com/nprogress/0.2.0/nprogress.min.css" rel="stylesheet">
+  <link href="//cdn.bootcss.com/highlight.js/9.12.0/styles/tomorrow.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="/css/style.css">
+<link rel="stylesheet" href="/css/plugins/gitment.css">
+  <script src="//cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
+  <script src="//cdn.bootcss.com/geopattern/1.2.3/js/geopattern.min.js"></script>
+  <script src="//cdn.bootcss.com/nprogress/0.2.0/nprogress.min.js"></script>
+  <script src="/js/qrious.js"></script>
+<script src="/js/gitment.js"></script>
+  
+  
+    <!-- MathJax support START -->
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdn.bootcss.com/mathjax/2.7.1/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <!-- MathJax support END -->
+  
+
+
+</head>
+<div class="wechat-share">
+  <img src="/css/images/logo.png">
+</div>
+
+  <body>
+    <header class="header fixed-header">
+  <div class="header-container">
+    <a class="home-link" href="/">
+      <div class="logo"></div>
+      <span>Marvin Liu</span>
+    </a>
+    <ul class="right-list">
+      
+        <li class="list-item">
+          
+            <a href="/" class="item-link">Home</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/tags/" class="item-link">Tags</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/archives/" class="item-link">Archives</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/project/" class="item-link">Projects</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/about/" class="item-link">About</a>
+          
+        </li>
+      
+    </ul>
+    <div class="menu">
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+    </div>
+    <div class="menu-mask">
+      <ul class="menu-list">
+        
+          <li class="menu-item">
+            
+              <a href="/" class="menu-link">Home</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/tags/" class="menu-link">Tags</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/archives/" class="menu-link">Archives</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/project/" class="menu-link">Projects</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/about/" class="menu-link">About</a>
+            
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</header>
+
+    <div id="article-banner">
+  <h2></h2>
+  <p class="post-date">2018-10-25</p>
+  <div class="arrow-down">
+    <a href="javascript:;"></a>
+  </div>
+</div>
+<main class="app-body flex-box">
+  <!-- Article START -->
+  <article class="post-article">
+    <section class="markdown-content"><h1 id="cikm-2018-Sentence-Similarity"><a href="#cikm-2018-Sentence-Similarity" class="headerlink" title="cikm 2018 - Sentence Similarity"></a>cikm 2018 - Sentence Similarity</h1><p>AliMe is a chatbot for online shopping in a global context, this task is solving the short text matching problem with different language (Spanish &amp; English)</p>
+<p><a href="https://tianchi.aliyun.com/competition/introduction.htm?spm=5176.100150.711.6.600e2784M5Z0uW&amp;raceId=231661" target="_blank" rel="noopener">Competition Website</a></p>
+<p>Result:<br>Single Deep Model: 66/1027<br>Ensemble Model: 38/1027</p>
+<p><a href="https://github.com/MarvinLSJ/LSTM-siamese" target="_blank" rel="noopener">Github Link</a></p>
+<h1 id="Table-of-Contents"><a href="#Table-of-Contents" class="headerlink" title="Table of Contents"></a>Table of Contents</h1><ul>
+<li><a href="https://github.com/MarvinLSJ/LSTM-siamese/blob/master/README.md#table-of-contents" target="_blank" rel="noopener">Table of Contents</a></li>
+<li>cikm 2018 - Sentence Similarity<ul>
+<li>Competition Introduction<ul>
+<li><a href="https://github.com/MarvinLSJ/LSTM-siamese/blob/master/README.md#test-data" target="_blank" rel="noopener">Data Description</a></li>
+<li><a href="https://github.com/MarvinLSJ/LSTM-siamese/blob/master/README.md#goal-and-evaluation" target="_blank" rel="noopener">Goal and Evaluation</a></li>
+</ul>
+</li>
+<li><a href="https://github.com/MarvinLSJ/LSTM-siamese/blob/master/README.md#ml-model" target="_blank" rel="noopener">ML Model</a></li>
+<li>Deep Model<ul>
+<li>Basic Model: LSTM-Siamese<ul>
+<li><a href="https://github.com/MarvinLSJ/LSTM-siamese/blob/master/README.md#name-origin" target="_blank" rel="noopener">Name Origin</a></li>
+<li><a href="https://github.com/MarvinLSJ/LSTM-siamese/blob/master/README.md#main-idea" target="_blank" rel="noopener">Main Idea</a></li>
+<li><a href="https://github.com/MarvinLSJ/LSTM-siamese/blob/master/README.md#baseline-configuration" target="_blank" rel="noopener">Baseline</a></li>
+<li><a href="https://github.com/MarvinLSJ/LSTM-siamese/blob/master/README.md#training" target="_blank" rel="noopener">Some Attempts</a></li>
+<li><a href="https://github.com/MarvinLSJ/LSTM-siamese/blob/master/README.md#baseline-result" target="_blank" rel="noopener">Baseline result</a></li>
+</ul>
+</li>
+<li>Data Augmentation<ul>
+<li><a href="https://github.com/MarvinLSJ/LSTM-siamese/blob/master/README.md#main-idea-1" target="_blank" rel="noopener">Main Idea</a></li>
+<li><a href="https://github.com/MarvinLSJ/LSTM-siamese/blob/master/README.md#problems" target="_blank" rel="noopener">Problems</a></li>
+<li><a href="https://github.com/MarvinLSJ/LSTM-siamese/blob/master/README.md#augmentation-result" target="_blank" rel="noopener">Augmentation result</a></li>
+</ul>
+</li>
+<li>Transfer Learning<ul>
+<li><a href="https://github.com/MarvinLSJ/LSTM-siamese/blob/master/README.md#main-idea-2" target="_blank" rel="noopener">Main Idea</a></li>
+<li><a href="https://github.com/MarvinLSJ/LSTM-siamese/blob/master/README.md#transfer-result" target="_blank" rel="noopener">Transfer result</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="https://github.com/MarvinLSJ/LSTM-siamese/blob/master/README.md#result" target="_blank" rel="noopener">Result</a></li>
+<li><a href="https://github.com/MarvinLSJ/LSTM-siamese/blob/master/README.md#ensemble" target="_blank" rel="noopener">Ensemble</a></li>
+<li>Implementation Details<ul>
+<li><a href="https://github.com/MarvinLSJ/LSTM-siamese/blob/master/README.md#basic-model" target="_blank" rel="noopener">Basic Model</a></li>
+<li><a href="https://github.com/MarvinLSJ/LSTM-siamese/blob/master/README.md#data-augmentation-1" target="_blank" rel="noopener">Data Augmentation</a></li>
+<li><a href="https://github.com/MarvinLSJ/LSTM-siamese/blob/master/README.md#transfer-learning-1" target="_blank" rel="noopener">Transfer Learning</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="Competition-Introduction"><a href="#Competition-Introduction" class="headerlink" title="Competition Introduction"></a>Competition Introduction</h2><h3 id="Data-Description"><a href="#Data-Description" class="headerlink" title="Data Description"></a>Data Description</h3><p><a href="https://github.com/MarvinLSJ/LSTM-siamese/blob/master/summary/Data%20description.png" target="_blank" rel="noopener"><img src="https://github.com/MarvinLSJ/LSTM-siamese/raw/master/summary/Data%20description.png" alt="Data description"></a></p>
+<h4 id="Training-Data"><a href="#Training-Data" class="headerlink" title="Training Data"></a>Training Data</h4><p>21400 Labeled Spanish sentence pairs &amp; English sentence pairs are provided;</p>
+<p>55669 Unlabeled Spanish sentences &amp; corresponding English translations are provided.</p>
+<h4 id="Test-Data"><a href="#Test-Data" class="headerlink" title="Test Data"></a>Test Data</h4><p>5000 Spanish sentence pairs</p>
+<h3 id="Goal-and-Evaluation"><a href="#Goal-and-Evaluation" class="headerlink" title="Goal and Evaluation"></a>Goal and Evaluation</h3><p>Predicting the similarity of Spanish sentence pairs in test set.</p>
+<p>Evaluated result by logloss.</p>
+<h2 id="ML-Model"><a href="#ML-Model" class="headerlink" title="ML Model"></a>ML Model</h2><p>Developed by <a href="https://github.com/freedomwyl" target="_blank" rel="noopener">freedomwyl</a> in <a href="https://github.com/freedomwyl/cikm2018" target="_blank" rel="noopener">Link</a></p>
+<h2 id="Deep-Model"><a href="#Deep-Model" class="headerlink" title="Deep Model"></a>Deep Model</h2><p>Common thoughts would be finding a way to represent sentences and calculate their similarity, with a little elaboration, here comes the basic model.</p>
+<h3 id="Basic-Model-LSTM-Siamese"><a href="#Basic-Model-LSTM-Siamese" class="headerlink" title="Basic Model: LSTM-Siamese"></a>Basic Model: LSTM-Siamese</h3><p><a href="https://github.com/MarvinLSJ/LSTM-siamese/blob/master/summary/siamese%20model.png" target="_blank" rel="noopener"><img src="https://github.com/MarvinLSJ/LSTM-siamese/raw/master/summary/siamese%20model.png" alt="siamese model"></a></p>
+<h4 id="Name-Origin"><a href="#Name-Origin" class="headerlink" title="Name Origin"></a>Name Origin</h4><p>The name comes from Siamese twins in Thailand, the conjoined twins whose body is partially shared with each other. Later the word “Siamese” refers to the phenomenon of twin structures, like this neural network.</p>
+<h4 id="Main-Idea"><a href="#Main-Idea" class="headerlink" title="Main Idea"></a>Main Idea</h4><p>This model takes in one sentence pair, encoding each sentence into vector representation through LSTM word by word (which gives the sentence embedding the information of word sequences). Then generate some vector features from them, feed into classifier to get the similarity.</p>
+<h4 id="Baseline"><a href="#Baseline" class="headerlink" title="Baseline"></a>Baseline</h4><p>With standard parameter settings as follows, the validation loss can be 0.3463, which is a pretty well off-line score.</p>
+<p><a href="https://github.com/MarvinLSJ/LSTM-siamese/blob/master/summary/baseline.png" target="_blank" rel="noopener"><img src="https://github.com/MarvinLSJ/LSTM-siamese/raw/master/summary/baseline.png" alt="Siamese-baseline"></a></p>
+<h5 id="Baseline-configuration"><a href="#Baseline-configuration" class="headerlink" title="Baseline configuration"></a>Baseline configuration</h5><p>experiment_name: ‘siamese-baseline’</p>
+<p>task: ‘train’<br>make_dict: False<br>data_preprocessing: False</p>
+<p>ckpt_dir: ‘ckpt/‘</p>
+<p>training:<br>num_epochs: 20<br>learning_rate: 0.01 #options = [‘adam’, ‘adadelta’, ‘rmsprop’]<br>optimizer: ‘sgd’</p>
+<p>embedding:<br>full_embedding_path: ‘input/wiki.es.vec’<br>cur_embedding_path: ‘input/embedding.pkl’</p>
+<p>model:<br>fc_dim: 100<br>name: ‘siamese’<br>embed_size: 300<br>batch_size: 1<br>embedding_freeze: False<br>encoder:<br>hidden_size: 150<br>num_layers: 1<br>bidirectional: False<br>dropout: 0.5</p>
+<p>result:<br>filename: ‘result.txt’<br>filepath: ‘res/‘</p>
+<h4 id="Some-Attempts"><a href="#Some-Attempts" class="headerlink" title="Some Attempts"></a>Some Attempts</h4><h5 id="Tuning-Parameters"><a href="#Tuning-Parameters" class="headerlink" title="Tuning Parameters"></a>Tuning Parameters</h5><ol>
+<li><p>Classifier</p>
+<p>fc_dim: classifier fully connected layer size</p>
+</li>
+<li><p>Encoder</p>
+<p>hidden_size: lstm hidden size</p>
+<p>num_layers: lstm layer</p>
+<p>bidirectional: bidirectional lstm can get more info</p>
+<p>dropout: avoid overfitting</p>
+</li>
+<li><p>Embedding</p>
+<p>embedding_freeze: Set it to false, then the embedding will participate backpropogation. Not so good from my experience, especially small training dataset.</p>
+</li>
+</ol>
+<h5 id="Structure"><a href="#Structure" class="headerlink" title="Structure"></a>Structure</h5><ol>
+<li><p>Classifier</p>
+<p>fc layers, non-linear fc layers(add ReLU)</p>
+</li>
+<li><p>Encoder</p>
+<p>Features generating method, current method is (v1, v2, abs(v1-v2), v1*v2), more features with different vector distance measurement?</p>
+</li>
+</ol>
+<h5 id="Training"><a href="#Training" class="headerlink" title="Training"></a>Training</h5><ol>
+<li><p>Early stopping</p>
+<p>Stop training whenever the |valid loss - train loss| &lt;= 0.02</p>
+</li>
+<li><p>Optimizer</p>
+<p>Default SGD;</p>
+<p>Rmsprop for self-adaptive learning rate;</p>
+<p>Adam for self-adaptive learning rate and momentum to get out of local optima;</p>
+</li>
+<li><p>Learning rate</p>
+<p>It should be small enough to avoid oscillation. Furthur exploration can be dynamic learning rate clipping.</p>
+</li>
+</ol>
+<h4 id="Baseline-result"><a href="#Baseline-result" class="headerlink" title="Baseline result"></a>Baseline result</h4><p>The basic model turns out to perform bad online, the reason is probably:</p>
+<ol>
+<li>This test set is very different from train set, no matter from class distribution (pos:neg = 1:3 for train set), or sentence features.</li>
+<li>This deep neural model is too sophisticated, with so much weights in LSTM and fully connected classifier, it overfits and get overtrained easily.</li>
+</ol>
+<h3 id="Data-Augmentation"><a href="#Data-Augmentation" class="headerlink" title="Data Augmentation"></a>Data Augmentation</h3><p>Based one the baseline result, we need to consider other path to avoid overfitting. The amount of data can always give us a surprise. We have a unexploited treasure - 55669 unlabeled data sentences which can be critical with proper use.</p>
+<h4 id="Main-Idea-1"><a href="#Main-Idea-1" class="headerlink" title="Main Idea"></a>Main Idea</h4><p>Here’s how we do it:</p>
+<p>Constructing Spanish sentence pairs by aligning them in rows and columns, and calculating their similarities in a unsupervised way.</p>
+<p><a href="https://github.com/MarvinLSJ/LSTM-siamese/blob/master/summary/Data%20Augmentation.png" target="_blank" rel="noopener"><img src="https://github.com/MarvinLSJ/LSTM-siamese/raw/master/summary/Data%20Augmentation.png" alt="Data Augmentation"></a></p>
+<p>First question is how to embedding the sentences.</p>
+<p>Following the simple and effective fashion, the first choice would be averaging every word embeddings in the sentence.</p>
+<p>Alternatively, it could be done in a more elaborate way, using AutoEncoder to train a sentence encoder. As the data amount is large enough, the encoder may be able to capture proper representation.</p>
+<p>Secondly, the similarity between two sentences can be measured by several kind of distances, I prefer the cosine and the word mover’s distance. Here are a example done during my intern applying these two method to calculate phrases’(store tags) similarity. (Link)</p>
+<p>Here are some other thoughts about the data augmentation, in a traditional way with synonym substitution, and an effective but not so practical way of double translation. (Link)</p>
+<h4 id="Problems"><a href="#Problems" class="headerlink" title="Problems"></a>Problems</h4><p>In doing so, I encountered a large problem when calculating the huge similarity matrix. In this calculation, we need to do O(n^2) to get the similarity matrix, at best O(n)*O(logn) to select the k best and worse result for every sentence, while the n is near 50k, that is impossible to run on single PC, and still haven’t figured out how to do it now.</p>
+<p>Thus, I run this augmentation with some twitching on 700 to get 13216 positive samples and 11569 negtive samples, and had another run on 1000 sentences to get 38345 positive samples and 28635 negative samples. (To balance the 3:1 neg-pos ratio in original dataset)</p>
+<h4 id="Augmentation-result"><a href="#Augmentation-result" class="headerlink" title="Augmentation result"></a>Augmentation result</h4><p><a href="https://github.com/MarvinLSJ/LSTM-siamese/blob/master/summary/aug-baseline.png" target="_blank" rel="noopener"><img src="https://github.com/MarvinLSJ/LSTM-siamese/raw/master/summary/aug-baseline.png" alt="aug-baseline"></a></p>
+<p>This is the result with augmentation with 1000 sentences. Local loss is really good to be around 0.1, but online still not ideal.</p>
+<p>That may cause by the selection from the similarity matrix, selecting 10 best and 10 worse to be positive and negative examples makes the augmented data looks good on amounts, using only 700 sentences to get 24000 boosting on training data. But it actually has so many repeating data like (s1, s2) (s2, s1), that leads to a even more servere overfitting.</p>
+<p>The ideal way of doing so is using all sentences to find top and bottom 1 and not duplicated sentence pairs. But how to do this efficiently is still puzzling me, hope readers can give me some hints. After doing so, the amount to be added into train set is still a problem to be discussed, how much is suitable to alleviate the overfitting?</p>
+<h3 id="Transfer-Learning"><a href="#Transfer-Learning" class="headerlink" title="Transfer Learning"></a>Transfer Learning</h3><p><a href="https://github.com/MarvinLSJ/LSTM-siamese/blob/master/summary/Transfer.png" target="_blank" rel="noopener"><img src="https://github.com/MarvinLSJ/LSTM-siamese/raw/master/summary/Transfer.png" alt="Transfer"></a></p>
+<p>As we are provided labeled English data, another thoughts would be using transfer learning.</p>
+<p>A number of animal words went directly from Indian languages into Spanish and then English, (Puma originated in Quechua, while jaguar comes from yaguar). So I thought transfer may be useful on this task.</p>
+<h4 id="Main-Idea-2"><a href="#Main-Idea-2" class="headerlink" title="Main Idea"></a>Main Idea</h4><p>The idea is rather simple, train the siamese-LSTM on English labeled data first, and transfer neural network’s weight to initialize Spanish model.</p>
+<h4 id="Transfer-result"><a href="#Transfer-result" class="headerlink" title="Transfer result"></a>Transfer result</h4><p><a href="https://github.com/MarvinLSJ/LSTM-siamese/blob/master/summary/transfer-baseline.png" target="_blank" rel="noopener"><img src="https://github.com/MarvinLSJ/LSTM-siamese/raw/master/summary/transfer-baseline.png" alt="transfer-baseline"></a></p>
+<p><a href="https://github.com/MarvinLSJ/LSTM-siamese/blob/master/summary/transfer_2layer.png" target="_blank" rel="noopener"><img src="https://github.com/MarvinLSJ/LSTM-siamese/raw/master/summary/transfer_2layer.png" alt="transfer_2layer"></a></p>
+<p>That is a quick and not fully extended attempt. As we can see from above, the result get better using 2 layer LSTM, but transfer result still can’t beat former result.</p>
+<p>Here are some after-thoughts: After transfer, there should be some frozen and unfrozen layers, especially the classifier layers, the English siamese may learn different features from Spanish input, so the classifier is doing a totally different job, which lead to a worse loss. Maybe we can freeze the classifier first and train encoder part, and then fine-tune the encoder part.</p>
+<h2 id="Result"><a href="#Result" class="headerlink" title="Result"></a>Result</h2><table>
+<thead>
+<tr>
+<th><strong>Siamese-LSTM</strong></th>
+<th><strong>Train Loss</strong></th>
+<th><strong>Valid Loss</strong></th>
+<th><strong>Optimizer**</strong>Learning Rate**</th>
+<th><strong>Explanation</strong></th>
+<th><strong>Analysis</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Baseline</strong></td>
+<td>0.3464</td>
+<td>0.3463</td>
+<td>SGD 0.01</td>
+<td>baseline model with 0.5 dropout</td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td>0.3651</td>
+<td>0.3667</td>
+<td>Adam 0.0001</td>
+<td>change optimizer</td>
+<td></td>
+</tr>
+<tr>
+<td><strong>Bidirectional</strong></td>
+<td>0.4427</td>
+<td>0.4413</td>
+<td>SGD 0.01</td>
+<td>Bidirectional LSTM</td>
+<td>Not helpful</td>
+</tr>
+<tr>
+<td><strong>Dropout</strong></td>
+<td>0.3833</td>
+<td>0.3928</td>
+<td>SGD 0.01</td>
+<td>Dropout 0.7</td>
+<td>Too much dropout</td>
+</tr>
+<tr>
+<td><strong>2-features</strong></td>
+<td>0.3421</td>
+<td>0.3668</td>
+<td>SGD 0.01</td>
+<td>using embeded sentence vector v1, v2 as features</td>
+<td>Model discriminating ability is constrained by only 2 features, but may get more generalization ability</td>
+</tr>
+<tr>
+<td><strong>3-features</strong></td>
+<td>0.4974</td>
+<td>0.5100</td>
+<td>SGD 0.01</td>
+<td>v1, v2, \</td>
+<td>v1-v2\</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td>0.4096</td>
+<td>0.4415</td>
+<td>Adadelta 0.01</td>
+<td>change optimizer</td>
+<td>Adadelta can do better with adaptive learning rate</td>
+</tr>
+<tr>
+<td><strong>4-features</strong></td>
+<td>0.3914</td>
+<td>0.3972</td>
+<td>SGD 0.01</td>
+<td>v1, v2, \</td>
+<td>v1-v2\</td>
+<td>, (v1+v2)/2</td>
+<td>Changing from v1<em>v2 to (v1+v2)/2, thought the avg can extract more info than v1</em>v2, seems not that way</td>
+</tr>
+<tr>
+<td></td>
+<td>0.3801</td>
+<td>0.3740</td>
+<td>RMSprop 0.0001</td>
+<td>change optimizer</td>
+<td>Adaptive learning rate wins again</td>
+</tr>
+<tr>
+<td><strong>5-features</strong></td>
+<td>0.4112</td>
+<td>0.4407</td>
+<td>Adadelta 0.01</td>
+<td>v1, v2, \</td>
+<td>v1-v2\</td>
+<td>, (v1+v2)/2, v1*v2</td>
+<td>Thus adding avg features even has negative effect</td>
+</tr>
+<tr>
+<td><strong>Transfer</strong></td>
+<td>0.3657-0.4765</td>
+<td>0.3794-0.4986</td>
+<td>SGD 0.01</td>
+<td>All trainable transfer from English to Spanish model</td>
+<td>English and Spanish may not that similar, or at least according to this model …</td>
+</tr>
+<tr>
+<td></td>
+<td>0.4208-0.3605</td>
+<td>0.4376-0.3699</td>
+<td>SGD 0.01</td>
+<td>2 layer LSTM</td>
+<td>Adding 1 layer give us some hope, but it’s just better a bit.</td>
+</tr>
+<tr>
+<td><strong>Data Augmentation</strong></td>
+<td>0.1082</td>
+<td>0.1136</td>
+<td>SGD 0.01</td>
+<td>Adding 38345 positive samples and 28635 negative samples generated from 1000 sentences</td>
+<td>Proved data is the most critical point. But the way we augmented need to be modified.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="Ensemble"><a href="#Ensemble" class="headerlink" title="Ensemble"></a>Ensemble</h2><ol>
+<li><p>Weighted Average</p>
+<p>The result is probabilities which is a number between [0,1], the simplest way to do ensemble is the weighted average on this probabilities. The weight on each model can be manully adjusted according to single model performance. As the deep and ML models may perform well on different part of the data, this simple way renders a good result and our final submission is based on 0.5 weights on each model.</p>
+</li>
+<li><p>Stacking</p>
+</li>
+</ol>
+<p><a href="https://github.com/MarvinLSJ/LSTM-siamese/blob/master/summary/Stacking.png" target="_blank" rel="noopener"><img src="https://github.com/MarvinLSJ/LSTM-siamese/raw/master/summary/Stacking.png" alt="Stacking"></a></p>
+<p>Stacking can be more comprehensive, using the first level model to extract different features.</p>
+<p>## </p>
+<h2 id="Implementation-Details"><a href="#Implementation-Details" class="headerlink" title="Implementation Details"></a>Implementation Details</h2><h3 id="Basic-Model"><a href="#Basic-Model" class="headerlink" title="Basic Model"></a>Basic Model</h3><p>Step by step Jupyter Notebook explanation: <a href="https://github.com/MarvinLSJ/LSTM-siamese/blob/master/Explanation.ipynb" target="_blank" rel="noopener">Explanation</a></p>
+<p><a href="https://github.com/MarvinLSJ/LSTM-siamese/blob/master/siamese.py" target="_blank" rel="noopener">Main</a> : Run this to train model and inference</p>
+<p><a href="https://github.com/MarvinLSJ/LSTM-siamese/blob/master/siamese-config.yaml" target="_blank" rel="noopener">Configuration File</a> : All configurations and parameters are set in here</p>
+<p><a href="https://github.com/MarvinLSJ/LSTM-siamese/blob/master/model.py" target="_blank" rel="noopener">Model</a> : Siamese-LSTM model in PyTorch</p>
+<p><a href="https://github.com/MarvinLSJ/LSTM-siamese/blob/master/data.py" target="_blank" rel="noopener">Dataset</a> : How samples are stored and extracted</p>
+<p><a href="https://github.com/MarvinLSJ/LSTM-siamese/blob/master/utils.py" target="_blank" rel="noopener">Pre-processing for Sentences &amp; Embedding</a> : Pre-processing from raw data, embedding</p>
+<h3 id="Data-Augmentation-1"><a href="#Data-Augmentation-1" class="headerlink" title="Data Augmentation"></a>Data Augmentation</h3><p><a href="https://github.com/MarvinLSJ/LSTM-siamese/blob/master/Data-augmenting.ipynb" target="_blank" rel="noopener">Data Augmentation Jupyter notebook</a> : Details in data augmentation using unlabeled data</p>
+<p><a href="https://github.com/MarvinLSJ/LSTM-siamese/blob/master/Prediction_with_augmented_data.ipynb" target="_blank" rel="noopener">Train with augmented data</a> : Using augmented data with 700 unlabeled sentences to train model</p>
+<p><a href="https://github.com/MarvinLSJ/meituan/blob/master/aug_dialog.ipynb" target="_blank" rel="noopener">Other Augmentation Methods</a>: Augmentation with synonym substitution and double-translation</p>
+<h3 id="Transfer-Learning-1"><a href="#Transfer-Learning-1" class="headerlink" title="Transfer Learning"></a>Transfer Learning</h3><p>Transfer learning Jupyter Notebook explanation: <a href="https://github.com/MarvinLSJ/LSTM-siamese/blob/master/Transfer-Ready.ipynb" target="_blank" rel="noopener">Transfer Explanation</a></p>
+<p><a href="https://github.com/MarvinLSJ/LSTM-siamese/blob/master/Transfer.py" target="_blank" rel="noopener">Transfer Main</a> : Run this to train transfering model and inference</p>
+<p><a href="https://github.com/MarvinLSJ/LSTM-siamese/blob/master/transfer-config.yaml" target="_blank" rel="noopener">Transfer Configuration</a> : Configuration file for transfer learning</p>
+</section>
+    <!-- Tags START -->
+    
+    <!-- Tags END -->
+    <!-- NAV START -->
+    
+  <div class="nav-container">
+    <!-- reverse left and right to put prev and next in a more logic postition -->
+    
+      <a class="nav-left" href="/2018/10/25/Test-essay/">
+        <span class="nav-arrow">← </span>
+        
+          Test essay
+        
+      </a>
+    
+    
+  </div>
+
+    <!-- NAV END -->
+    <!-- 打赏 START -->
+    
+      <div class="money-like">
+        <div class="reward-btn">
+          赏
+          <span class="money-code">
+            <span class="alipay-code">
+              <div class="code-image"></div>
+              <b>使用支付宝打赏</b>
+            </span>
+            <span class="wechat-code">
+              <div class="code-image"></div>
+              <b>使用微信打赏</b>
+            </span>
+          </span>
+        </div>
+        <p class="notice">若你觉得我的文章对你有帮助，欢迎点击上方按钮对我打赏</p>
+      </div>
+    
+    <!-- 打赏 END -->
+    <!-- 二维码 START -->
+    
+      <div class="qrcode">
+        <canvas id="share-qrcode"></canvas>
+        <p class="notice">扫描二维码，分享此文章</p>
+      </div>
+    
+    <!-- 二维码 END -->
+    
+      <!-- Gitment START -->
+      <div id="comments"></div>
+      <!-- Gitment END -->
+    
+  </article>
+  <!-- Article END -->
+  <!-- Catalog START -->
+  
+    <aside class="catalog-container">
+  <div class="toc-main">
+    <strong class="toc-title">Catalog</strong>
+    
+      <ol class="toc-nav"><li class="toc-nav-item toc-nav-level-1"><a class="toc-nav-link" href="#cikm-2018-Sentence-Similarity"><span class="toc-nav-text">cikm 2018 - Sentence Similarity</span></a></li><li class="toc-nav-item toc-nav-level-1"><a class="toc-nav-link" href="#Table-of-Contents"><span class="toc-nav-text">Table of Contents</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#Competition-Introduction"><span class="toc-nav-text">Competition Introduction</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#Data-Description"><span class="toc-nav-text">Data Description</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-4"><a class="toc-nav-link" href="#Training-Data"><span class="toc-nav-text">Training Data</span></a></li><li class="toc-nav-item toc-nav-level-4"><a class="toc-nav-link" href="#Test-Data"><span class="toc-nav-text">Test Data</span></a></li></ol></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#Goal-and-Evaluation"><span class="toc-nav-text">Goal and Evaluation</span></a></li></ol></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#ML-Model"><span class="toc-nav-text">ML Model</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#Deep-Model"><span class="toc-nav-text">Deep Model</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#Basic-Model-LSTM-Siamese"><span class="toc-nav-text">Basic Model: LSTM-Siamese</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-4"><a class="toc-nav-link" href="#Name-Origin"><span class="toc-nav-text">Name Origin</span></a></li><li class="toc-nav-item toc-nav-level-4"><a class="toc-nav-link" href="#Main-Idea"><span class="toc-nav-text">Main Idea</span></a></li><li class="toc-nav-item toc-nav-level-4"><a class="toc-nav-link" href="#Baseline"><span class="toc-nav-text">Baseline</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-5"><a class="toc-nav-link" href="#Baseline-configuration"><span class="toc-nav-text">Baseline configuration</span></a></li></ol></li><li class="toc-nav-item toc-nav-level-4"><a class="toc-nav-link" href="#Some-Attempts"><span class="toc-nav-text">Some Attempts</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-5"><a class="toc-nav-link" href="#Tuning-Parameters"><span class="toc-nav-text">Tuning Parameters</span></a></li><li class="toc-nav-item toc-nav-level-5"><a class="toc-nav-link" href="#Structure"><span class="toc-nav-text">Structure</span></a></li><li class="toc-nav-item toc-nav-level-5"><a class="toc-nav-link" href="#Training"><span class="toc-nav-text">Training</span></a></li></ol></li><li class="toc-nav-item toc-nav-level-4"><a class="toc-nav-link" href="#Baseline-result"><span class="toc-nav-text">Baseline result</span></a></li></ol></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#Data-Augmentation"><span class="toc-nav-text">Data Augmentation</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-4"><a class="toc-nav-link" href="#Main-Idea-1"><span class="toc-nav-text">Main Idea</span></a></li><li class="toc-nav-item toc-nav-level-4"><a class="toc-nav-link" href="#Problems"><span class="toc-nav-text">Problems</span></a></li><li class="toc-nav-item toc-nav-level-4"><a class="toc-nav-link" href="#Augmentation-result"><span class="toc-nav-text">Augmentation result</span></a></li></ol></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#Transfer-Learning"><span class="toc-nav-text">Transfer Learning</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-4"><a class="toc-nav-link" href="#Main-Idea-2"><span class="toc-nav-text">Main Idea</span></a></li><li class="toc-nav-item toc-nav-level-4"><a class="toc-nav-link" href="#Transfer-result"><span class="toc-nav-text">Transfer result</span></a></li></ol></li></ol></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#Result"><span class="toc-nav-text">Result</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#Ensemble"><span class="toc-nav-text">Ensemble</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#Implementation-Details"><span class="toc-nav-text">Implementation Details</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#Basic-Model"><span class="toc-nav-text">Basic Model</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#Data-Augmentation-1"><span class="toc-nav-text">Data Augmentation</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#Transfer-Learning-1"><span class="toc-nav-text">Transfer Learning</span></a></li></ol></li></ol></li></ol>
+    
+  </div>
+</aside>
+  
+  <!-- Catalog END -->
+</main>
+
+<script>
+  (function () {
+    var url = 'http://yoursite.com/2018/10/25/cikm 2018 - Sentence Similarity/';
+    var banner = ''
+    if (banner !== '' && banner !== 'undefined' && banner !== 'null') {
+      $('#article-banner').css({
+        'background-image': 'url(' + banner + ')'
+      })
+    } else {
+      $('#article-banner').geopattern(url)
+    }
+    $('.header').removeClass('fixed-header')
+
+     // error image
+    $(".markdown-content img").on('error', function() {
+      $(this).attr('src', 'http://file.muyutech.com/error-img.png')
+      $(this).css({
+        'cursor': 'default'
+      })
+    })
+
+    // zoom image
+    $(".markdown-content img").on('click', function() {
+      var src = $(this).attr('src')
+      if (src !== 'http://file.muyutech.com/error-img.png') {
+        var imageW = $(this).width()
+        var imageH = $(this).height()
+        
+        var zoom = ($(window).width() * 0.95 / imageW).toFixed(2)
+        zoom = zoom < 1 ? 1 : zoom
+        zoom = zoom > 2 ? 2 : zoom
+        var transY = (($(window).height() - imageH) / 2).toFixed(2)
+
+        $('body').append('<div class="image-view-wrap"><div class="image-view-inner"><img src="'+ src +'" /></div></div>')
+        $('.image-view-wrap').addClass('wrap-active')
+        $('.image-view-wrap img').css({
+          'width': `${imageW}`,
+          'transform': `translate3d(0, ${transY}px, 0) scale3d(${zoom}, ${zoom}, 1)`
+        })
+        $('html').css('overflow', 'hidden')
+
+        $('.image-view-wrap').on('click', function() {
+          $(this).remove()
+          $('html').attr('style', '')
+        })
+      }
+    })
+
+    // qrcode
+    var qr = new QRious({
+      element: document.getElementById('share-qrcode'),
+      value: document.location.href
+    });
+
+    // gitment
+    var gitmentConfig = "yanm1ng";
+    if (gitmentConfig !== 'undefined') {
+      var gitment = new Gitment({
+        id: "",
+        owner: "yanm1ng",
+        repo: "yanm1ng.github.io",
+        oauth: {
+          client_id: "0f87e490e00ee3fd87ef",
+          client_secret: "4a9d2b148e7971c2201ad12131ce8bf8159ccd2e"
+        },
+        theme: {
+          render(state, instance) {
+            const container = document.createElement('div')
+            container.lang = "en-US"
+            container.className = 'gitment-container gitment-root-container'
+            container.appendChild(instance.renderHeader(state, instance))
+            container.appendChild(instance.renderEditor(state, instance))
+            container.appendChild(instance.renderComments(state, instance))
+            container.appendChild(instance.renderFooter(state, instance))
+            return container;
+          }
+        }
+      })
+      gitment.render(document.getElementById('comments'))
+    }
+  })();
+</script>
+
+<script>
+  var disqus_shortname = '';
+  
+  var disqus_url = 'http://yoursite.com/2018/10/25/cikm 2018 - Sentence Similarity/';
+  
+  (function(){
+    var dsq = document.createElement('script');
+    dsq.type = 'text/javascript';
+    dsq.async = true;
+    dsq.src = '//go.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+  })();
+</script>
+
+    <div class="scroll-top">
+  <span class="arrow-icon"></span>
+</div>
+    <footer class="app-footer">
+  <p class="copyright">
+    &copy; 2018 | Proudly powered by <a href="https://hexo.io" target="_blank">Hexo</a>
+    <br>
+    Theme by <a href="https://github.com/yanm1ng">yanm1ng</a>
+  </p>
+</footer>
+
+<script>
+  function async(u, c) {
+    var d = document, t = 'script',
+      o = d.createElement(t),
+      s = d.getElementsByTagName(t)[0];
+    o.src = u;
+    if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+    s.parentNode.insertBefore(o, s);
+  }
+</script>
+<script>
+  async("//cdn.bootcss.com/fastclick/1.0.6/fastclick.min.js", function(){
+    FastClick.attach(document.body);
+  })
+</script>
+
+<script>
+  var hasLine = 'true';
+  async("//cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js", function(){
+    $('figure pre').each(function(i, block) {
+      var figure = $(this).parents('figure');
+      if (hasLine === 'false') {
+        figure.find('.gutter').hide();
+      }
+      var lang = figure.attr('class').split(' ')[1] || 'code';
+      var codeHtml = $(this).html();
+      var codeTag = document.createElement('code');
+      codeTag.className = lang;
+      codeTag.innerHTML = codeHtml;
+      $(this).attr('class', '').empty().html(codeTag);
+      figure.attr('data-lang', lang.toUpperCase());
+      hljs.highlightBlock(block);
+    });
+  })
+</script>
+<!-- Baidu Tongji -->
+
+<script src="/js/script.js"></script>
+  </body>
+</html>
