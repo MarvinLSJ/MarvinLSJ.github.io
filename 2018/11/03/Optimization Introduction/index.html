@@ -1,0 +1,568 @@
+<!DOCTYPE html>
+<html>
+  <head><meta name="generator" content="Hexo 3.8.0">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+  <meta name="description" content="yanm1ng&#39;s blog">
+  <meta name="keyword" content="hexo-theme, vuejs">
+  
+    <link rel="shortcut icon" href="/css/images/logo.png">
+  
+  <title>
+    
+      Optimization Introduction | Perceptron
+    
+  </title>
+  <link href="//cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+  <link href="//cdn.bootcss.com/nprogress/0.2.0/nprogress.min.css" rel="stylesheet">
+  <link href="//cdn.bootcss.com/highlight.js/9.12.0/styles/tomorrow.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="/css/style.css">
+<link rel="stylesheet" href="/css/plugins/gitment.css">
+  <script src="//cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
+  <script src="//cdn.bootcss.com/geopattern/1.2.3/js/geopattern.min.js"></script>
+  <script src="//cdn.bootcss.com/nprogress/0.2.0/nprogress.min.js"></script>
+  <script src="/js/qrious.js"></script>
+<script src="/js/gitment.js"></script>
+  
+  
+    <!-- MathJax support START -->
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdn.bootcss.com/mathjax/2.7.1/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <!-- MathJax support END -->
+  
+
+
+</head>
+<div class="wechat-share">
+  <img src="/css/images/logo.png">
+</div>
+
+  <body>
+    <header class="header fixed-header">
+  <div class="header-container">
+    <a class="home-link" href="/">
+      <div class="logo"></div>
+      <span>Perceptron</span>
+    </a>
+    <ul class="right-list">
+      
+        <li class="list-item">
+          
+            <a href="/" class="item-link">Home</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/tags/" class="item-link">Tags</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/archives/" class="item-link">Archives</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/project/" class="item-link">Projects</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/about/" class="item-link">About</a>
+          
+        </li>
+      
+    </ul>
+    <div class="menu">
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+    </div>
+    <div class="menu-mask">
+      <ul class="menu-list">
+        
+          <li class="menu-item">
+            
+              <a href="/" class="menu-link">Home</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/tags/" class="menu-link">Tags</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/archives/" class="menu-link">Archives</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/project/" class="menu-link">Projects</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/about/" class="menu-link">About</a>
+            
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</header>
+
+    <div id="article-banner">
+  <h2>Optimization Introduction</h2>
+  <p class="post-date">2018-11-03</p>
+  <div class="arrow-down">
+    <a href="javascript:;"></a>
+  </div>
+</div>
+<main class="app-body flex-box">
+  <!-- Article START -->
+  <article class="post-article">
+    <section class="markdown-content"><p>近几年优化方法因机器学习变得流行起来，从随机梯度下降，BFGS到adam，大多数机器学习问题能被抽象化为优化问题。所以想要真正理解机器学习算法，熟悉各类优化算法是如何找到最优解，以及面对各类优化问题我们应该如何选择是非常重要的。因此我将在UCI Optimization课程中所学到的东西记录下来，用于加深理论理解，同时也分享给同样感兴趣的人。<br><br></p>
+<p>Optimization has been a hit recently because of the surge of machine learning and deep learning. From stochastic gradient, BFGS to adam, the genuie problem of most machine learning problem can be melt down to a optimization problem, it’s essential for us to understand how do these methods lead us to the optimal, and which methods to choose when facing different kind of optimization problems. Therefore I took down what I’ve learnt from the optimization course to solidify my theorical foundation and gain a deeper understanding of what happend behind all these optimization process, as well as sharing and discussing with you.</p>
+<h2 id="Historical-Sketch"><a href="#Historical-Sketch" class="headerlink" title="Historical Sketch"></a>Historical Sketch</h2><p>优化在研究和工业界中应用十分广泛；早在1960年非线性优化就被Schmit应用于结构设计，1961被Johnson应用于工程优化。如今应用从验证蛋白分子结构到追踪电磁波遍地开花，数十年来飞机机翼的大小都是通过优化方法决定。<br><br></p>
+<p>Optimizations are wildly used in research and industrial; Nonlinear optimization methods were applied in structural design early back in 1960 by Schmit, engineering optimization in 1961 by Johnson. Today, applications are everywhere, from identifying structures of protein molecules to tracing electromagnetic rays, and optimization has been used for decades in sizing airplane wings.<br><br><br>Gradient-based Method</p>
+<table>
+<thead>
+<tr>
+<th>When</th>
+<th>Who</th>
+<th>What</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1847</td>
+<td>Cauchy</td>
+<td>First gradient method</td>
+</tr>
+<tr>
+<td>1943</td>
+<td>Courant</td>
+<td>Penalty</td>
+</tr>
+<tr>
+<td>1951</td>
+<td>Karush, Kuhn, Tucker</td>
+<td>KKT optimality conditions for constrained problems</td>
+</tr>
+<tr>
+<td>1964</td>
+<td>Fletcher and Reeves</td>
+<td>Conjugate gradient (unconstrained method)</td>
+</tr>
+<tr>
+<td>1971</td>
+<td>Brent and others</td>
+<td>hybrid polynomial-interval methods</td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td>Interval search using Golden section &amp; Fibonacci numbers</td>
+</tr>
+<tr>
+<td>1970s</td>
+<td></td>
+<td>Sequential quadratic programming(SQP) for constrained minimizations</td>
+</tr>
+<tr>
+<td>1984</td>
+<td>Karmarkar</td>
+<td>Interior methods for linear programming</td>
+</tr>
+</tbody>
+</table>
+<p><br></p>
+<p>Non-gradient Method</p>
+<table>
+<thead>
+<tr>
+<th>When</th>
+<th>Who</th>
+<th>What</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1952</td>
+<td>Bellmen</td>
+<td>Dynamic programming</td>
+</tr>
+<tr>
+<td>1953</td>
+<td>Metropolis</td>
+<td>Simulated annealing</td>
+</tr>
+<tr>
+<td>1960</td>
+<td>Rosenbrock</td>
+<td>Orthogonal directions</td>
+</tr>
+<tr>
+<td>1961</td>
+<td>Hooke and Jeeves</td>
+<td>Pattern search</td>
+</tr>
+<tr>
+<td>1964</td>
+<td>Powell</td>
+<td>Conjugate directions</td>
+</tr>
+<tr>
+<td>1965</td>
+<td>Nelder and Meade</td>
+<td>Simplex method,</td>
+</tr>
+<tr>
+<td>1967</td>
+<td>Duffin, Peterson, Zener</td>
+<td>Geometric programming</td>
+</tr>
+<tr>
+<td>1975</td>
+<td>Holland</td>
+<td>Genetic algorithms</td>
+</tr>
+</tbody>
+</table>
+<p><br></p>
+<h2 id="Optimization-modeling"><a href="#Optimization-modeling" class="headerlink" title="Optimization modeling"></a>Optimization modeling</h2><p>Most engineering problems can be expressed as minimizing (add a minus if maximizing), which has a general form:<br><br></p>
+<p>minimize  $ f(x)$</p>
+<p>subject to $g_i(x)\le0, i=1,…,m$</p>
+<p>and $h_j(x) = 0, j=1,….,l$ </p>
+<p>and $x^L\le x\le x^U$</p>
+<p>where $x= (x_1,x_2,….,x_n)^T$</p>
+<p><br></p>
+<h3 id="Example"><a href="#Example" class="headerlink" title="Example"></a>Example</h3><p><strong>Shortest distance from a point to a line</strong><br><br><br>Given a line $$a_0+a_1x_1 + a_2x_2=0$ and a point  $x^0=(x_1^0, x_2^0)$$</p>
+<p>minimize $$f=(x_1-x_1^2)^2 + (x_2-x_2^0)^2$$</p>
+<p>subject to $$h(x) \equiv a_0+a_1x_1+a_2x_2=0$$</p>
+<p>In matrix form:</p>
+<p>minimize $$f=(\boldsymbol{x} - \boldsymbol{x}^0)^T(\boldsymbol{x} - \boldsymbol{x}^0) $$</p>
+<p>subject to $$h(\boldsymbol{x}) \equiv \boldsymbol{a}^T \boldsymbol{x} - b  = 0$$</p>
+<p>Using method of <em>Lagrange multipliers</em>, obtained $$\boldsymbol{x}^* = \boldsymbol{x}^0 - \frac{(\boldsymbol{a}^T\boldsymbol{x}^0-b)}{\boldsymbol{a}^T\boldsymbol{a}}\boldsymbol{a}$$</p>
+<p>Thus the shortest distance <em>d</em> is $$d=\frac{|\boldsymbol{a}^T \boldsymbol{x}^0-b|}{\sqrt{(\boldsymbol{a}^T \boldsymbol{a})}}$$</p>
+<p>This problem can be generalized to a point to any dimension hyperplane.</p>
+<p><br></p>
+<h1 id="Theoretical-Foundation"><a href="#Theoretical-Foundation" class="headerlink" title="Theoretical Foundation"></a>Theoretical Foundation</h1><h2 id="Weierstrass-Theorem"><a href="#Weierstrass-Theorem" class="headerlink" title="Weierstrass Theorem"></a>Weierstrass Theorem</h2><p><a href="https://en.wikipedia.org/wiki/Extreme_value_theorem" target="_blank" rel="noopener">Weierstrass theorem</a> (Extrem value theorem) states that if a real-valued function  $f(x)$ is <strong>continuous on the closed interval [a,b]</strong>, then  $f(x)$ must attain a maximum and a minimum, each at least once.</p>
+<p>i.e. There must exist real numbers <em>m</em> and <em>M</em> such that: $m&lt;f(x)&lt;M$, for all $x\in [a,b]$ </p>
+<p><br></p>
+<h2 id="Quadratic-Forms"><a href="#Quadratic-Forms" class="headerlink" title="Quadratic Forms"></a>Quadratic Forms</h2><p>Consider $f=x_1^2 - 6x_1x_2+9x_2^2$, we can rewrite it in <strong>Quadratic Form</strong>:   </p>
+<p>$$f= (x_1\  x_2) \left[<br>\begin{matrix}<br>1 &amp; -3  \<br>-3 &amp; 9  \<br>\end{matrix}\right] \left(\begin{matrix}x_1 \ x_2 \end{matrix}\right)$$ </p>
+<p>More simple as $f=\boldsymbol{x}^T \boldsymbol{A} \boldsymbol{x}  $, $\boldsymbol{x}$ is an n-vector, $\boldsymbol{A}$ is the coeffiecient matrix, and it’s <a href="https://en.wikipedia.org/wiki/Symmetric_matrix" target="_blank" rel="noopener">symmetric</a>, also can be expressed in index notation as $\sum_i\sum_jx_ia_{ij}x_j$.</p>
+<p><br></p>
+<h2 id="Positive-Definite-Matrices"><a href="#Positive-Definite-Matrices" class="headerlink" title="Positive Definite Matrices"></a>Positive Definite Matrices</h2><p>What is <strong>Positive Definite</strong>?</p>
+<p>A quadratic form is <a href="https://en.wikipedia.org/wiki/Positive-definite_matrix" target="_blank" rel="noopener">positive definite</a> if $\boldsymbol{y}^T \boldsymbol{A} \boldsymbol{y} &gt;0$  for any nonzero vector $\boldsymbol{y}$ , and $\boldsymbol{y}^T \boldsymbol{A} \boldsymbol{y} &gt;0$ if and only if $\boldsymbol{y}=0$ .All eigenvalues of a positive definite matrix are strictly positive.</p>
+<p>$\boldsymbol{A}$ is negative definite if ($-\boldsymbol{A}$ ) is positive definite. </p>
+<p>A quadratic form is positive semidefinite if $\boldsymbol{y}^T \boldsymbol{A} \boldsymbol{y} \ge 0 $ for any nonzero  $\boldsymbol{y}$. All eigenvalues of a positive semidefinite matrix are nonnegative.<br><br><br><strong>Sylvester’s test</strong> for a positive definite matrix: Denote $\boldsymbol{A}^i$ the submatrix of up-left square matrix with $i$  length, $\boldsymbol{A}$ is positive definite if and only if det($\boldsymbol{A}^i$) &gt; 0, for $i=1,2,…,n$.</p>
+<p><br></p>
+<h2 id="boldsymbol-C-n-Continuity"><a href="#boldsymbol-C-n-Continuity" class="headerlink" title="$\boldsymbol{C^n}$Continuity"></a>$\boldsymbol{C^n}$Continuity</h2><p>We say the function $f$ is $C^0$ continuous at a point $\boldsymbol{a}$ if: given any sequence {$\boldsymbol{x}_k$} in $D(f)$ which converges to $\boldsymbol{a}$, then $f(\boldsymbol{x}_k)$ must converge to $ f(\boldsymbol{a})$.<br><br><br>$C^1$ and $C^2$ Continuity is considering the continuity of $d(f)$  and $d^2(f)$.</p>
+<p><br></p>
+<h2 id="Gradient-Vector-and-Hessian-Matrix"><a href="#Gradient-Vector-and-Hessian-Matrix" class="headerlink" title="Gradient Vector and Hessian Matrix"></a>Gradient Vector and Hessian Matrix</h2><p>Given a function $f(x) \in C^1$, the <strong>gradient vector</strong> $\nabla f = [\frac{\partial f}{\partial x_1}, \frac{\partial f}{\partial x_2}, …, \frac{\partial f}{\partial x_n}]^T$ </p>
+<p>Directional derivative of $f$  is the derivative of $f$ in any unit direction $\boldsymbol{s}$ at a point $\boldsymbol{c}$, obtained as: $$D_sf(\boldsymbol{c}) = lim_{t\to0}\frac{1}{t} {f(\boldsymbol{c}+t\boldsymbol{s})-f(\boldsymbol{c})} = \nabla f(\boldsymbol{c})^T\boldsymbol{s}$$</p>
+<p>The <strong>Hessian Matrix</strong><br><br><br>$$\nabla^2f \equiv \left[ \begin{matrix} \frac{\partial^2f}{\partial x_1 \partial x_1} &amp; \frac{\partial^2f}{\partial x_1 \partial x_2} &amp; … &amp; \frac{\partial^2f}{\partial x_1 \partial x_n}\ \  &amp; \frac{\partial^2f}{\partial x_2 \partial x_2} &amp; … &amp; \frac{\partial^2f}{\partial x_2 \partial x_n}\ &amp;…\ symmetric &amp;  &amp; &amp;\frac{\partial^2f}{\partial x_n \partial x_n}\ \end{matrix}\right] $$</p>
+<p>The <a href="https://en.wikipedia.org/wiki/Hessian_matrix" target="_blank" rel="noopener">Hessian</a> is related to the convexity of the function, the Hessian of $f$ at a point $\boldsymbol{c}$ is denoted as $\nabla^2f(\boldsymbol{c})$.</p>
+<h3 id="Newton’s-forward-difference-formula"><a href="#Newton’s-forward-difference-formula" class="headerlink" title="Newton’s forward difference formula"></a>Newton’s forward difference formula</h3><p>Newton’s forward difference formula is a numerical evaluation of gradient.</p>
+<p><strong>Newton’s forward difference formula</strong> is often utilized to obtain an approximate expression for $\nabla f$ at a given point. The general formula is $$\frac{\partial f}{\partial x_i} \approx \frac{f(x_1^0 , x_2^0 … x_i^0 + \epsilon … x_n^0) - f(\boldsymbol{x}^0)}{\epsilon}, i=1,…n$$</p>
+<p>For greater accuracy, the central difference formula choose the different value between $x_i^0-0.5\epsilon$ and $x_i^0+0.5\epsilon$.<br><br></p>
+<h2 id="Taylor’s-Theorem-amp-Quadratic-Approximation"><a href="#Taylor’s-Theorem-amp-Quadratic-Approximation" class="headerlink" title="Taylor’s Theorem &amp; Quadratic Approximation"></a>Taylor’s Theorem &amp; Quadratic Approximation</h2><p>1-Dimension: $$q(x) = f(x_0) + f^\prime(x_0)(x-x_0) + \frac{1}{2}f^{\prime\prime}(x_0)(x-x_0)^2$$</p>
+<p>n-Dimension: $$f(\boldsymbol{x}) = f(\boldsymbol{x}^0) + \nabla f(\boldsymbol{x}^0)^T(\boldsymbol{x}- \boldsymbol{x}^0) + \frac{1}{2}(\boldsymbol{x}-\boldsymbol{x}^0)^T[\nabla^2f(\boldsymbol{z})](\boldsymbol{x}-\boldsymbol{x}^0)$$</p>
+<p><br></p>
+<h2 id="Linearly-Independence"><a href="#Linearly-Independence" class="headerlink" title="Linearly Independence"></a>Linearly Independence</h2><p><strong>Linearly Independence of Vectors</strong>:  $\boldsymbol{x}_3$ can not be formed by $\boldsymbol{x}_1$ and $\boldsymbol{x}_2$, then $\boldsymbol{x}_3$ is independent of $\boldsymbol{x}_1$ and $\boldsymbol{x}_2$.</p>
+<p>Definition: If linear combination $\sum_{k=1}^m\alpha_k\boldsymbol{x}^k=0$ implies that all $\alpha_k$ are zero.</p>
+<p><br></p>
+<h2 id="Convexity"><a href="#Convexity" class="headerlink" title="Convexity"></a>Convexity</h2><p><strong>Convex set</strong>: If for any two points in the set, every point on the line joining the two points is in the set. </p>
+<p> $\forall x_1, x_2, 0\leq \alpha \leq1$, the point $\alpha x_1 + (1-\alpha)x_2$ is in the set.</p>
+<p><strong>Convex domain</strong>: For domain $\Omega$, $ 0\leq \lambda \leq1, \forall \boldsymbol{x},\boldsymbol{y} \in \Omega, \ \ (1-\lambda)\boldsymbol{x} + \lambda\boldsymbol{y} \in \Omega$</p>
+<p><strong>Convex function</strong>: $\forall \boldsymbol{x}_1. \boldsymbol{x}_2 \in R^d, 0\leq \lambda \leq1$</p>
+<p>$$f(\lambda \boldsymbol{x}_1 + (1-\lambda)\boldsymbol{x}_2)\leq \lambda f(\boldsymbol{x}_1) + (1-\lambda) f(\boldsymbol{x}_2)$$</p>
+<p>Properties of convex function:</p>
+<ol>
+<li><p>$f^{\prime \prime}(x) \ge 0$ in $\Omega$</p>
+</li>
+<li><p>$f\subset C^1$, $f$ is convex over $\Omega$ if and only if $\forall x,y \ f(y) \geq f(x) + f^\prime(x)(y-x)$</p>
+<p>   <a href="https://github.com/MarvinLSJ/CS268_Optimization/blob/master/notes/images/image-20181029110014771.png?raw=true" target="_blank" rel="noopener"><img src="https://github.com/MarvinLSJ/CS268_Optimization/blob/master/notes/images/image-20181029110014771.png?raw=true" alt="convex"></a></p>
+</li>
+<li><p>$f\subset C^1$, $f^\prime(x^\star)(y-x^\star)\ge0$ for every y in S, then $x^\star$ is the global minimum</p>
+</li>
+<li><p>$f\subset C^2$,  $f$ is convex over $\Omega$ <--> $f(y) \geq f(x) + \nabla f(x)^T(y-x), \forall x,y \in \Omega$  </--></p>
+</li>
+<li><p>$f$ is convex  and $x^\star$ is the global minimum if $\nabla f(x^\star) = 0$ (Can be proved by #2) </p>
+</li>
+</ol>
+<h1 id="Optimization-Methods"><a href="#Optimization-Methods" class="headerlink" title="Optimization Methods"></a>Optimization Methods</h1><p>According to <strong>problem types</strong>, we can roughly separate optimization methods into:   </p>
+<p>Discrete/ Continuous;  </p>
+<p>Unconstrained/ Constrained;  </p>
+<p>Subjected to application level, these methods can be categorized by <strong>input</strong> information:</p>
+<p>$C^0$ input: Only know the $f(x)$ itself;</p>
+<p>$C^1$ input: know $f(x)$ and $df(x)$ ;</p>
+<p>$C^2$ input: know  $f(x), df(x)$ and $d^2f(x)$ ;</p>
+<p><br></p>
+<h2 id="Optimization-Algorithms-Implementaion-Links"><a href="#Optimization-Algorithms-Implementaion-Links" class="headerlink" title="Optimization Algorithms Implementaion Links:"></a>Optimization Algorithms Implementaion Links:</h2><p>I’ve implemented several optimization methods mentioned in this series, there are detailed hyperparameter settings, stopping criterion choices, test functions and experiments, all in jupyter notebook on my github, links are as follows:<br><a href="https://github.com/MarvinLSJ/CS268_Optimization/blob/master/hw1/hw1.ipynb" target="_blank" rel="noopener">Golden Section &amp; Coordinate Descent</a><br><a href="https://github.com/MarvinLSJ/CS268_Optimization/blob/master/hw2/hw2.ipynb" target="_blank" rel="noopener">Steepest Descent &amp; Conjugate Gradient</a><br><a href="https://github.com/MarvinLSJ/CS268_Optimization/blob/master/hw3/hw3.ipynb" target="_blank" rel="noopener">Simulated Annealing</a></p>
+<p>We will explore and implement several traditional optimization methods to get a deeper view in the following essays.</p>
+</section>
+    <!-- Tags START -->
+    
+      <div class="tags">
+        <span>Tags:</span>
+        
+  <a href="/tags#Optimization">
+    <span class="tag-code">Optimization</span>
+  </a>
+
+  <a href="/tags#Theoretical Foundation">
+    <span class="tag-code">Theoretical Foundation</span>
+  </a>
+
+      </div>
+    
+    <!-- Tags END -->
+    <!-- NAV START -->
+    
+  <div class="nav-container">
+    <!-- reverse left and right to put prev and next in a more logic postition -->
+    
+      <a class="nav-left" href="/2018/10/25/cikm 2018 - Sentence Similarity/">
+        <span class="nav-arrow">← </span>
+        
+          cikm 2018 - Sentence Similarity
+        
+      </a>
+    
+    
+      <a class="nav-right" href="/2018/11/04/1D Unconstrained Minimization/">
+        
+          1D Unconstrained Minimization
+        
+        <span class="nav-arrow"> →</span>
+      </a>
+    
+  </div>
+
+    <!-- NAV END -->
+    <!-- 打赏 START -->
+    
+      <div class="money-like">
+        <div class="reward-btn">
+          赏
+          <span class="money-code">
+            <span class="alipay-code">
+              <div class="code-image"></div>
+              <b>使用支付宝打赏</b>
+            </span>
+            <span class="wechat-code">
+              <div class="code-image"></div>
+              <b>使用微信打赏</b>
+            </span>
+          </span>
+        </div>
+        <p class="notice">若你觉得我的文章对你有帮助，欢迎点击上方按钮对我打赏</p>
+      </div>
+    
+    <!-- 打赏 END -->
+    <!-- 二维码 START -->
+    
+      <div class="qrcode">
+        <canvas id="share-qrcode"></canvas>
+        <p class="notice">扫描二维码，分享此文章</p>
+      </div>
+    
+    <!-- 二维码 END -->
+    
+      <!-- Gitment START -->
+      <div id="comments"></div>
+      <!-- Gitment END -->
+    
+  </article>
+  <!-- Article END -->
+  <!-- Catalog START -->
+  
+    <aside class="catalog-container">
+  <div class="toc-main">
+    <strong class="toc-title">Catalog</strong>
+    
+      <ol class="toc-nav"><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#Historical-Sketch"><span class="toc-nav-text">Historical Sketch</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#Optimization-modeling"><span class="toc-nav-text">Optimization modeling</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#Example"><span class="toc-nav-text">Example</span></a></li></ol></li></ol><li class="toc-nav-item toc-nav-level-1"><a class="toc-nav-link" href="#Theoretical-Foundation"><span class="toc-nav-text">Theoretical Foundation</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#Weierstrass-Theorem"><span class="toc-nav-text">Weierstrass Theorem</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#Quadratic-Forms"><span class="toc-nav-text">Quadratic Forms</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#Positive-Definite-Matrices"><span class="toc-nav-text">Positive Definite Matrices</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#boldsymbol-C-n-Continuity"><span class="toc-nav-text">$\boldsymbol{C^n}$Continuity</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#Gradient-Vector-and-Hessian-Matrix"><span class="toc-nav-text">Gradient Vector and Hessian Matrix</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#Newton’s-forward-difference-formula"><span class="toc-nav-text">Newton’s forward difference formula</span></a></li></ol></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#Taylor’s-Theorem-amp-Quadratic-Approximation"><span class="toc-nav-text">Taylor’s Theorem &amp; Quadratic Approximation</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#Linearly-Independence"><span class="toc-nav-text">Linearly Independence</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#Convexity"><span class="toc-nav-text">Convexity</span></a></li></ol></li><li class="toc-nav-item toc-nav-level-1"><a class="toc-nav-link" href="#Optimization-Methods"><span class="toc-nav-text">Optimization Methods</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#Optimization-Algorithms-Implementaion-Links"><span class="toc-nav-text">Optimization Algorithms Implementaion Links:</span></a></li></ol>
+    
+  </li></div>
+</aside>
+  
+  <!-- Catalog END -->
+</main>
+
+<script>
+  (function () {
+    var url = 'http://yoursite.com/2018/11/03/Optimization Introduction/';
+    var banner = ''
+    if (banner !== '' && banner !== 'undefined' && banner !== 'null') {
+      $('#article-banner').css({
+        'background-image': 'url(' + banner + ')'
+      })
+    } else {
+      $('#article-banner').geopattern(url)
+    }
+    $('.header').removeClass('fixed-header')
+
+     // error image
+    $(".markdown-content img").on('error', function() {
+      $(this).attr('src', 'http://file.muyutech.com/error-img.png')
+      $(this).css({
+        'cursor': 'default'
+      })
+    })
+
+    // zoom image
+    $(".markdown-content img").on('click', function() {
+      var src = $(this).attr('src')
+      if (src !== 'http://file.muyutech.com/error-img.png') {
+        var imageW = $(this).width()
+        var imageH = $(this).height()
+        
+        var zoom = ($(window).width() * 0.95 / imageW).toFixed(2)
+        zoom = zoom < 1 ? 1 : zoom
+        zoom = zoom > 2 ? 2 : zoom
+        var transY = (($(window).height() - imageH) / 2).toFixed(2)
+
+        $('body').append('<div class="image-view-wrap"><div class="image-view-inner"><img src="'+ src +'" /></div></div>')
+        $('.image-view-wrap').addClass('wrap-active')
+        $('.image-view-wrap img').css({
+          'width': `${imageW}`,
+          'transform': `translate3d(0, ${transY}px, 0) scale3d(${zoom}, ${zoom}, 1)`
+        })
+        $('html').css('overflow', 'hidden')
+
+        $('.image-view-wrap').on('click', function() {
+          $(this).remove()
+          $('html').attr('style', '')
+        })
+      }
+    })
+
+    // qrcode
+    var qr = new QRious({
+      element: document.getElementById('share-qrcode'),
+      value: document.location.href
+    });
+
+    // gitment
+    var gitmentConfig = "yanm1ng";
+    if (gitmentConfig !== 'undefined') {
+      var gitment = new Gitment({
+        id: "Optimization Introduction",
+        owner: "yanm1ng",
+        repo: "yanm1ng.github.io",
+        oauth: {
+          client_id: "0f87e490e00ee3fd87ef",
+          client_secret: "4a9d2b148e7971c2201ad12131ce8bf8159ccd2e"
+        },
+        theme: {
+          render(state, instance) {
+            const container = document.createElement('div')
+            container.lang = "en-US"
+            container.className = 'gitment-container gitment-root-container'
+            container.appendChild(instance.renderHeader(state, instance))
+            container.appendChild(instance.renderEditor(state, instance))
+            container.appendChild(instance.renderComments(state, instance))
+            container.appendChild(instance.renderFooter(state, instance))
+            return container;
+          }
+        }
+      })
+      gitment.render(document.getElementById('comments'))
+    }
+  })();
+</script>
+
+<script>
+  var disqus_shortname = '';
+  
+  var disqus_url = 'http://yoursite.com/2018/11/03/Optimization Introduction/';
+  
+  (function(){
+    var dsq = document.createElement('script');
+    dsq.type = 'text/javascript';
+    dsq.async = true;
+    dsq.src = '//go.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+  })();
+</script>
+
+    <div class="scroll-top">
+  <span class="arrow-icon"></span>
+</div>
+    <footer class="app-footer">
+  <p class="copyright">
+    &copy; 2018 | Proudly powered by <a href="https://hexo.io" target="_blank">Hexo</a>
+    <br>
+    Theme by <a href="https://github.com/yanm1ng">yanm1ng</a>
+  </p>
+</footer>
+
+<script>
+  function async(u, c) {
+    var d = document, t = 'script',
+      o = d.createElement(t),
+      s = d.getElementsByTagName(t)[0];
+    o.src = u;
+    if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+    s.parentNode.insertBefore(o, s);
+  }
+</script>
+<script>
+  async("//cdn.bootcss.com/fastclick/1.0.6/fastclick.min.js", function(){
+    FastClick.attach(document.body);
+  })
+</script>
+
+<script>
+  var hasLine = 'true';
+  async("//cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js", function(){
+    $('figure pre').each(function(i, block) {
+      var figure = $(this).parents('figure');
+      if (hasLine === 'false') {
+        figure.find('.gutter').hide();
+      }
+      var lang = figure.attr('class').split(' ')[1] || 'code';
+      var codeHtml = $(this).html();
+      var codeTag = document.createElement('code');
+      codeTag.className = lang;
+      codeTag.innerHTML = codeHtml;
+      $(this).attr('class', '').empty().html(codeTag);
+      figure.attr('data-lang', lang.toUpperCase());
+      hljs.highlightBlock(block);
+    });
+  })
+</script>
+<!-- Baidu Tongji -->
+
+<script src="/js/script.js"></script>
+  </body>
+</html>

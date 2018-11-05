@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html>
+  <head><meta name="generator" content="Hexo 3.8.0">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+  <meta name="description" content="yanm1ng&#39;s blog">
+  <meta name="keyword" content="hexo-theme, vuejs">
+  
+    <link rel="shortcut icon" href="/css/images/logo.png">
+  
+  <title>
+    
+      1D Unconstrained Minimization | Perceptron
+    
+  </title>
+  <link href="//cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+  <link href="//cdn.bootcss.com/nprogress/0.2.0/nprogress.min.css" rel="stylesheet">
+  <link href="//cdn.bootcss.com/highlight.js/9.12.0/styles/tomorrow.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="/css/style.css">
+<link rel="stylesheet" href="/css/plugins/gitment.css">
+  <script src="//cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
+  <script src="//cdn.bootcss.com/geopattern/1.2.3/js/geopattern.min.js"></script>
+  <script src="//cdn.bootcss.com/nprogress/0.2.0/nprogress.min.js"></script>
+  <script src="/js/qrious.js"></script>
+<script src="/js/gitment.js"></script>
+  
+  
+    <!-- MathJax support START -->
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdn.bootcss.com/mathjax/2.7.1/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <!-- MathJax support END -->
+  
+
+
+</head>
+<div class="wechat-share">
+  <img src="/css/images/logo.png">
+</div>
+
+  <body>
+    <header class="header fixed-header">
+  <div class="header-container">
+    <a class="home-link" href="/">
+      <div class="logo"></div>
+      <span>Perceptron</span>
+    </a>
+    <ul class="right-list">
+      
+        <li class="list-item">
+          
+            <a href="/" class="item-link">Home</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/tags/" class="item-link">Tags</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/archives/" class="item-link">Archives</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/project/" class="item-link">Projects</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/about/" class="item-link">About</a>
+          
+        </li>
+      
+    </ul>
+    <div class="menu">
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+    </div>
+    <div class="menu-mask">
+      <ul class="menu-list">
+        
+          <li class="menu-item">
+            
+              <a href="/" class="menu-link">Home</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/tags/" class="menu-link">Tags</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/archives/" class="menu-link">Archives</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/project/" class="menu-link">Projects</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/about/" class="menu-link">About</a>
+            
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</header>
+
+    <div id="article-banner">
+  <h2>1D Unconstrained Minimization</h2>
+  <p class="post-date">2018-11-04</p>
+  <div class="arrow-down">
+    <a href="javascript:;"></a>
+  </div>
+</div>
+<main class="app-body flex-box">
+  <!-- Article START -->
+  <article class="post-article">
+    <section class="markdown-content"><p>一维无限制最小化也被称为线性优化，通常根据算法适用的最优点类型划分为单点最优算法和多点最优算法。<br><br></p>
+<p>These kind of optimizations are also called <strong>line minimization algorithms</strong>, traditionally, it can be categorized into methods that find local minima &amp; global minima.<br><br><br>局部最优的方法主要有 Fibonacci Algorithm 和 Golden Section Algorithm，本文将会深入阐述。另外还有一种基于多项式近似的 Brent’s Method，基于二次近似甚至三次近似来做区间更新和缩减。<br><br></p>
+<p>For unimodal minimization algorithms to find local minimization, there are two foundamental methods named <strong>Fibonacci Algorithm</strong> and <strong>Golden Section Algorithm</strong> that we will get into details, there’s also a <strong>Brent’s Method</strong>, which updates every step based on polynominal quadratic or even cubic.<br><br><br>全局最优方法主要有 Shubert-Piyavskii，通过一个预先确定的区间更新方法，不断更新区间内的最优锯齿点来实现保证找到全局最优。(模拟退火和基因算法找全局最优是基于随机搜索)<br><br></p>
+<p>When comes to multimodal methods, there’s a <strong>Shubert-Piyavskii</strong> method to find the global minimum in a deterministic search, keep updating the saw-tooth points to make sure finding the global optimum. (While simulated annealing or genetic algorithm is based on random search)<br><br></p>
+<h2 id="Unimodal-minimization-algorithms"><a href="#Unimodal-minimization-algorithms" class="headerlink" title="Unimodal minimization algorithms"></a>Unimodal minimization algorithms</h2><p>All these three methods covered here are based on a simple thought: Bracketing / Three-Point Pattern.</p>
+<p><img src="https://github.com/MarvinLSJ/CS268_Optimization/raw/master/notes/images/image-20181104142750393.png" alt="image-20181104142750393"></p>
+<p>找局部最优传统方法的核心思想就在于：对于每一步，根据当前点找到一些参考点从而确定一个函数值在减小的区间，不断重复直到满足条件。<br><br></p>
+<p>The intrinsic ideas behind all these three methods are : <strong>For every step, given an initial point, we set an interval and sample some inner points to locate the minima; then iterate to shrink the interval util we reach the minima.</strong> The difference between following methods lies in how we update every intervals.<br><br><br>Let’s take a look at Fibonacci first.<br><br></p>
+<h3 id="Fibonacci-Algorithm"><a href="#Fibonacci-Algorithm" class="headerlink" title="Fibonacci Algorithm"></a>Fibonacci Algorithm</h3><p><a href="https://en.wikipedia.org/wiki/Fibonacci_number" target="_blank" rel="noopener">Fibonacci numbers</a> are developed by Leonardo of Pisa(nicknamed Fibonacci) in the study of reproduction of rabbits.<br><br></p>
+<p>Fibonacci method is the best when we know which interval is the optimum in, i.e. if we know the range that contains the optimum point, Fibonacci can lead us to the value with the least efforts(in the least number of trials or function evaluations).<br><br></p>
+<p>By proceeding in the reverse order of Fibonacci numbers, intervals are updated as listed below:</p>
+<p>$$I_1 = F_nI_n $, $I_2=F_{n-1}I_n$$</p>
+<p>$$I_2 = \frac{F_{n-1}}{F_n}I_1$$<br><br></p>
+<p>And we have the Binet’s formula to get every Fibonacci numbers.</p>
+<p>Binet’s formula: $$F_i = \frac{1}{\sqrt5}\left[ (\frac{1+\sqrt5}{2})^{i+1}-\frac{1-\sqrt5}{2})^{i+1}\right]$$</p>
+<p>$$\alpha = \frac{F_{i-1}}{F_i}=(\frac{\sqrt5-1}{2})(\frac{1-s^i}{1-s^{i+1}}) \ \ i=2,3,…n \ \ s=\frac{1-\sqrt5}{1+\sqrt5}$$<br><br></p>
+<p>Step update: $$x_3 = \alpha x_4 + (1-\alpha)x_1, x_2 = \alpha x_1 + (1-\alpha)x_4$$<br><br></p>
+<p>Stop criterion: set desired accuracy $\epsilon=\frac{I_n}{I_1}$, find smallest n such that $\frac{1}{F_n} &lt; \epsilon$<br><br></p>
+<p><img src="https://github.com/MarvinLSJ/CS268_Optimization/raw/master/notes/images/image-20181029140303810.png" alt="image-20181029140303810"></p>
+<p>As the number of iterations is increased, the ratio $\frac{F_{n-1}}{F_n}$ reaches the limit $\frac{\sqrt5-1}{2}=0.61803$, when the number of iterations get larger than 12, the ratio is within $\pm0.0014\%$ of the limit $\frac{\sqrt5-1}{2}$ , which is called the golden ratio. Then it comes to another method that its interval reduction strategy is the golden ratio.<br><br></p>
+<h3 id="Golden-Section"><a href="#Golden-Section" class="headerlink" title="Golden Section"></a>Golden Section</h3><p>Given a intial start point, the intervals are determined as follows:</p>
+<p>$$I_n = \tau^{n-1}I_1$$</p>
+<p>$$\frac{I_n}{I_{n-1}} = \tau = \frac{\sqrt5-1}{2} = 0.61803$$</p>
+<p>Three-point pattern: $x_2 = x_1+ s$, then make sure $x_2&lt;x_1$; $x_4 = x_1 + (1+\frac{1}{\tau})s$ ; then make sure $f_4 &gt; f_2$ ; $s=\frac{s}{\tau}$ ; </p>
+<p><img src="https://github.com/MarvinLSJ/CS268_Optimization/raw/master/notes/images/image-20181029140224616.png" alt="image-20181029140224616"></p>
+<p>Stopping Criteria:</p>
+<ol>
+<li><p>Absolute + Relative</p>
+<p> Absolute part: Tolerance values $\epsilon_x$ for interval value; $\epsilon_F$ for function value   </p>
+<p> Relative part: Based on machine precision $\epsilon_R$ &amp; current best point $x_2$ ; $\epsilon_R = \sqrt{\epsilon_{machine}}$</p>
+<p> Interval check: $|x_1-x_4| \le \epsilon_R|x_2| + \epsilon_x$</p>
+<p> Funcion value check: $$\bar f = \frac{f_1+f_2+f_3}{3}$$<br> $$\bar{f}-\bar{f}_{old}\le \epsilon_R|f_2| + \epsilon_F$$</p>
+</li>
+<li><p>Based on total number of function evaluations N</p>
+</li>
+<li>Based on x-value: $xtol = \sqrt{\epsilon_m}(1.+abs(x_2))$, stop when $x_3-x_1\le2xtol$</li>
+<li>Based on f-value: $ftol=\sqrt{\epsilon_m}(1.+abs(f_2))$ ,stop when $\bar f_{new}-\bar f_{old} \le ftol$</li>
+</ol>
+<h3 id="Coordinate-Descent"><a href="#Coordinate-Descent" class="headerlink" title="Coordinate Descent"></a>Coordinate Descent</h3><p>Coordinate descent is simply a expansion into multi-dimensional line minimization methods, optimize one dimention at a time.<br><br></p>
+<h3 id="Golden-Section-amp-Coordinate-Descent-Implementation-and-Analysis"><a href="#Golden-Section-amp-Coordinate-Descent-Implementation-and-Analysis" class="headerlink" title="Golden Section &amp; Coordinate Descent Implementation and Analysis"></a>Golden Section &amp; Coordinate Descent Implementation and Analysis</h3><p><a href="https://github.com/MarvinLSJ/CS268_Optimization/blob/master/hw1/hw1.ipynb" target="_blank" rel="noopener">Github jupyter notebook Link</a> : It contains the detailed implementation of <strong>Golden Section Method</strong> and <strong>Coordinate Descent</strong> in python, and several test functions as well as the performance analysis.</p>
+<p>The parameters and implementation details are omitted here, but you can find them thoroughly explained in the link above, here are some simple illustrations:</p>
+<p><img src="https://github.com/MarvinLSJ/CS268_Optimization/raw/master/notes/images/GS_result.png" alt="gsresult"></p>
+<p>Another test:</p>
+<p><img src="https://github.com/MarvinLSJ/CS268_Optimization/raw/master/notes/images/gs_result2.png" alt="gsresult2"></p>
+<p><a href="https://en.wikipedia.org/wiki/Bessel%27s_correction" target="_blank" rel="noopener">Bessel’s correction</a>: Multiplying the uncorrected sample variance by the factor $\frac{1}{n-1}$, $s^2=\frac{n}{n-1}s_n^2$</p>
+<p><br></p>
+<h3 id="Polynomial-Based-Methods"><a href="#Polynomial-Based-Methods" class="headerlink" title="Polynomial-Based Methods"></a>Polynomial-Based Methods</h3><p>As interval becomes small, a smooth function can be approxiamated by a polynomial. The minimum point of the polynomial fit is a good candidate for the minimum value of the function.  </p>
+<p>Quadratic fit of <a href="https://en.wikipedia.org/wiki/Lagrange_polynomial" target="_blank" rel="noopener">Lagrange polynomial</a>: </p>
+<p>$$q(x)=f_1\frac{(x-x_2)(x-x_3)}{(x_1-x_2)(x_1-x_3)} + f_2\frac{(x-x_1)(x-x_3)}{(x_2-x_1)(x_2-x_3)}+f_3\frac{(x-x_1)(x-x_2)}{(x_3-x_1)(x_3-x_2)}$$</p>
+<p><br></p>
+<h2 id="Multimodal-Minimization-Algorithm"><a href="#Multimodal-Minimization-Algorithm" class="headerlink" title="Multimodal Minimization Algorithm"></a>Multimodal Minimization Algorithm</h2><h3 id="Shubert-Piyavskii-Method"><a href="#Shubert-Piyavskii-Method" class="headerlink" title="Shubert-Piyavskii Method"></a>Shubert-Piyavskii Method</h3><p>This method is designed to find the global maximum. It has first assumed the function is <a href="https://en.wikipedia.org/wiki/Lipschitz_continuity" target="_blank" rel="noopener">Lipschitz continuous</a>, that is, for function $f(x)$ in $[a,b]$, there is a constant L &gt; 0 that </p>
+<p>$$|f(x)-f(y)|\le L|x-y|, \forall x,y\in[a,b]$$</p>
+<p>A sequence of points converging to the global maximum is genreated by constructing a saw-tooth cover over the function.</p>
+<ol>
+<li>Given function $f(x_n)$, interval $[a,b]$ and starting point $x_0$.</li>
+<li>Select sampling point $x_0$ at the midpoint of the interval, then draw a pair of lines by $f(x) = f(x_0) + L|x-x_0|$</li>
+<li>Find the two saw-tooth points ${(t_1,z_1),(t_2,z_2)}={(b,f(x_0+\frac{L}{2}(b-a), (a,f(x_0)+\frac{L}{2}(b-a)}$</li>
+<li>Add saw-tooth points into a set arranged as $z_1\le z_2 \le …\le z_n$, and replaces the last point with the saw-tooth point drawn from $f(t_n)$.</li>
+<li>Stop when $z_n-y_n \le \epsilon$</li>
+</ol>
+<p><img src="https://github.com/MarvinLSJ/CS268_Optimization/raw/master/notes/images/image-20181104154113160.png" alt="image-20181104154113160"></p>
+<p>We will dive into steepest descent and conjugate gradient methods further in next essays. Thanks for reading!</p>
+</section>
+    <!-- Tags START -->
+    
+      <div class="tags">
+        <span>Tags:</span>
+        
+  <a href="/tags#Optimization">
+    <span class="tag-code">Optimization</span>
+  </a>
+
+  <a href="/tags#Theoretical Foundation">
+    <span class="tag-code">Theoretical Foundation</span>
+  </a>
+
+      </div>
+    
+    <!-- Tags END -->
+    <!-- NAV START -->
+    
+  <div class="nav-container">
+    <!-- reverse left and right to put prev and next in a more logic postition -->
+    
+      <a class="nav-left" href="/2018/11/03/Optimization Introduction/">
+        <span class="nav-arrow">← </span>
+        
+          Optimization Introduction
+        
+      </a>
+    
+    
+  </div>
+
+    <!-- NAV END -->
+    <!-- 打赏 START -->
+    
+      <div class="money-like">
+        <div class="reward-btn">
+          赏
+          <span class="money-code">
+            <span class="alipay-code">
+              <div class="code-image"></div>
+              <b>使用支付宝打赏</b>
+            </span>
+            <span class="wechat-code">
+              <div class="code-image"></div>
+              <b>使用微信打赏</b>
+            </span>
+          </span>
+        </div>
+        <p class="notice">若你觉得我的文章对你有帮助，欢迎点击上方按钮对我打赏</p>
+      </div>
+    
+    <!-- 打赏 END -->
+    <!-- 二维码 START -->
+    
+      <div class="qrcode">
+        <canvas id="share-qrcode"></canvas>
+        <p class="notice">扫描二维码，分享此文章</p>
+      </div>
+    
+    <!-- 二维码 END -->
+    
+      <!-- Gitment START -->
+      <div id="comments"></div>
+      <!-- Gitment END -->
+    
+  </article>
+  <!-- Article END -->
+  <!-- Catalog START -->
+  
+    <aside class="catalog-container">
+  <div class="toc-main">
+    <strong class="toc-title">Catalog</strong>
+    
+      <ol class="toc-nav"><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#Unimodal-minimization-algorithms"><span class="toc-nav-text">Unimodal minimization algorithms</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#Fibonacci-Algorithm"><span class="toc-nav-text">Fibonacci Algorithm</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#Golden-Section"><span class="toc-nav-text">Golden Section</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#Coordinate-Descent"><span class="toc-nav-text">Coordinate Descent</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#Golden-Section-amp-Coordinate-Descent-Implementation-and-Analysis"><span class="toc-nav-text">Golden Section &amp; Coordinate Descent Implementation and Analysis</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#Polynomial-Based-Methods"><span class="toc-nav-text">Polynomial-Based Methods</span></a></li></ol></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#Multimodal-Minimization-Algorithm"><span class="toc-nav-text">Multimodal Minimization Algorithm</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#Shubert-Piyavskii-Method"><span class="toc-nav-text">Shubert-Piyavskii Method</span></a></li></ol></li></ol>
+    
+  </div>
+</aside>
+  
+  <!-- Catalog END -->
+</main>
+
+<script>
+  (function () {
+    var url = 'http://yoursite.com/2018/11/04/1D Unconstrained Minimization/';
+    var banner = ''
+    if (banner !== '' && banner !== 'undefined' && banner !== 'null') {
+      $('#article-banner').css({
+        'background-image': 'url(' + banner + ')'
+      })
+    } else {
+      $('#article-banner').geopattern(url)
+    }
+    $('.header').removeClass('fixed-header')
+
+     // error image
+    $(".markdown-content img").on('error', function() {
+      $(this).attr('src', 'http://file.muyutech.com/error-img.png')
+      $(this).css({
+        'cursor': 'default'
+      })
+    })
+
+    // zoom image
+    $(".markdown-content img").on('click', function() {
+      var src = $(this).attr('src')
+      if (src !== 'http://file.muyutech.com/error-img.png') {
+        var imageW = $(this).width()
+        var imageH = $(this).height()
+        
+        var zoom = ($(window).width() * 0.95 / imageW).toFixed(2)
+        zoom = zoom < 1 ? 1 : zoom
+        zoom = zoom > 2 ? 2 : zoom
+        var transY = (($(window).height() - imageH) / 2).toFixed(2)
+
+        $('body').append('<div class="image-view-wrap"><div class="image-view-inner"><img src="'+ src +'" /></div></div>')
+        $('.image-view-wrap').addClass('wrap-active')
+        $('.image-view-wrap img').css({
+          'width': `${imageW}`,
+          'transform': `translate3d(0, ${transY}px, 0) scale3d(${zoom}, ${zoom}, 1)`
+        })
+        $('html').css('overflow', 'hidden')
+
+        $('.image-view-wrap').on('click', function() {
+          $(this).remove()
+          $('html').attr('style', '')
+        })
+      }
+    })
+
+    // qrcode
+    var qr = new QRious({
+      element: document.getElementById('share-qrcode'),
+      value: document.location.href
+    });
+
+    // gitment
+    var gitmentConfig = "yanm1ng";
+    if (gitmentConfig !== 'undefined') {
+      var gitment = new Gitment({
+        id: "1D Unconstrained Minimization",
+        owner: "yanm1ng",
+        repo: "yanm1ng.github.io",
+        oauth: {
+          client_id: "0f87e490e00ee3fd87ef",
+          client_secret: "4a9d2b148e7971c2201ad12131ce8bf8159ccd2e"
+        },
+        theme: {
+          render(state, instance) {
+            const container = document.createElement('div')
+            container.lang = "en-US"
+            container.className = 'gitment-container gitment-root-container'
+            container.appendChild(instance.renderHeader(state, instance))
+            container.appendChild(instance.renderEditor(state, instance))
+            container.appendChild(instance.renderComments(state, instance))
+            container.appendChild(instance.renderFooter(state, instance))
+            return container;
+          }
+        }
+      })
+      gitment.render(document.getElementById('comments'))
+    }
+  })();
+</script>
+
+<script>
+  var disqus_shortname = '';
+  
+  var disqus_url = 'http://yoursite.com/2018/11/04/1D Unconstrained Minimization/';
+  
+  (function(){
+    var dsq = document.createElement('script');
+    dsq.type = 'text/javascript';
+    dsq.async = true;
+    dsq.src = '//go.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+  })();
+</script>
+
+    <div class="scroll-top">
+  <span class="arrow-icon"></span>
+</div>
+    <footer class="app-footer">
+  <p class="copyright">
+    &copy; 2018 | Proudly powered by <a href="https://hexo.io" target="_blank">Hexo</a>
+    <br>
+    Theme by <a href="https://github.com/yanm1ng">yanm1ng</a>
+  </p>
+</footer>
+
+<script>
+  function async(u, c) {
+    var d = document, t = 'script',
+      o = d.createElement(t),
+      s = d.getElementsByTagName(t)[0];
+    o.src = u;
+    if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+    s.parentNode.insertBefore(o, s);
+  }
+</script>
+<script>
+  async("//cdn.bootcss.com/fastclick/1.0.6/fastclick.min.js", function(){
+    FastClick.attach(document.body);
+  })
+</script>
+
+<script>
+  var hasLine = 'true';
+  async("//cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js", function(){
+    $('figure pre').each(function(i, block) {
+      var figure = $(this).parents('figure');
+      if (hasLine === 'false') {
+        figure.find('.gutter').hide();
+      }
+      var lang = figure.attr('class').split(' ')[1] || 'code';
+      var codeHtml = $(this).html();
+      var codeTag = document.createElement('code');
+      codeTag.className = lang;
+      codeTag.innerHTML = codeHtml;
+      $(this).attr('class', '').empty().html(codeTag);
+      figure.attr('data-lang', lang.toUpperCase());
+      hljs.highlightBlock(block);
+    });
+  })
+</script>
+<!-- Baidu Tongji -->
+
+<script src="/js/script.js"></script>
+  </body>
+</html>
