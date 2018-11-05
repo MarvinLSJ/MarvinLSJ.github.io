@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html>
+  <head><meta name="generator" content="Hexo 3.8.0">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+  <meta name="description" content="yanm1ng&#39;s blog">
+  <meta name="keyword" content="hexo-theme, vuejs">
+  
+    <link rel="shortcut icon" href="/css/images/logo.png">
+  
+  <title>
+    
+      Steepest Descent | Perceptron
+    
+  </title>
+  <link href="//cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+  <link href="//cdn.bootcss.com/nprogress/0.2.0/nprogress.min.css" rel="stylesheet">
+  <link href="//cdn.bootcss.com/highlight.js/9.12.0/styles/tomorrow.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="/css/style.css">
+<link rel="stylesheet" href="/css/plugins/gitment.css">
+  <script src="//cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
+  <script src="//cdn.bootcss.com/geopattern/1.2.3/js/geopattern.min.js"></script>
+  <script src="//cdn.bootcss.com/nprogress/0.2.0/nprogress.min.js"></script>
+  <script src="/js/qrious.js"></script>
+<script src="/js/gitment.js"></script>
+  
+  
+    <!-- MathJax support START -->
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdn.bootcss.com/mathjax/2.7.1/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <!-- MathJax support END -->
+  
+
+
+</head>
+<div class="wechat-share">
+  <img src="/css/images/logo.png">
+</div>
+
+  <body>
+    <header class="header fixed-header">
+  <div class="header-container">
+    <a class="home-link" href="/">
+      <div class="logo"></div>
+      <span>Perceptron</span>
+    </a>
+    <ul class="right-list">
+      
+        <li class="list-item">
+          
+            <a href="/" class="item-link">Home</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/tags/" class="item-link">Tags</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/archives/" class="item-link">Archives</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/project/" class="item-link">Projects</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/about/" class="item-link">About</a>
+          
+        </li>
+      
+    </ul>
+    <div class="menu">
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+    </div>
+    <div class="menu-mask">
+      <ul class="menu-list">
+        
+          <li class="menu-item">
+            
+              <a href="/" class="menu-link">Home</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/tags/" class="menu-link">Tags</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/archives/" class="menu-link">Archives</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/project/" class="menu-link">Projects</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/about/" class="menu-link">About</a>
+            
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</header>
+
+    <div id="article-banner">
+  <h2>Steepest Descent</h2>
+  <p class="post-date">2018-11-05</p>
+  <div class="arrow-down">
+    <a href="javascript:;"></a>
+  </div>
+</div>
+<main class="app-body flex-box">
+  <!-- Article START -->
+  <article class="post-article">
+    <section class="markdown-content"><p><br><br>Let’s consider this classical numerical methods for unconstrained minimization of a function of n variables.</p>
+<h2 id="Ironhead’s-treasure-trip"><a href="#Ironhead’s-treasure-trip" class="headerlink" title="Ironhead’s treasure trip"></a>Ironhead’s treasure trip</h2><p>To make it simple and fascinating, let’s consider optimizing a function like finding the mysterious treasure in a barbarian way:<br><br></p>
+<p><img src="https://github.com/MarvinLSJ/CS268_Optimization/blob/master/notes/images/barbarian.jpg?raw=true" alt="barbarian"><br><br><br>Let me introduce Ironhead, the barbarian hero who wants to gain his glory by finding the treasure ahead of others. He got the fancy skill named “furious charge”, he can dash furiously towards one direction as far as he want ignoring any obstacles, but that skill cools down everyday, which means he could only charge towards one direction as far as he want everyday. However, that won’t seperate him with other barbarians, so we help him by giving him a treasure-detection device: it tells him the distance between his location and the treasure spot. And Ironhead is smart enough to figure out that he can step out a little bit to see which direction makes distance decreasing the most, e.g. he can find out the best direction for his current location everyday.<br><br></p>
+<p>Then he start his trip, good luck and bon voyage, Ironhead!<br><br></p>
+<h2 id="Calm-down-and-analyze"><a href="#Calm-down-and-analyze" class="headerlink" title="Calm down and analyze"></a>Calm down and analyze</h2><p>While he’s charging furiously, let’s re-think this in a magician(or probably college students’) way:<br><br></p>
+<p>Ironhead got two blessing gifts corresponding to the exact two words in steepest descent, the device tells him current best “descent” direction, and the furious charge allows him explore “steepest” to get to the best position along this direction. More mathmatically, Ironhead is trying to minimize the distance between him and the treasure, the device could provide him the evaluation function $f(x)$ as well as the first order derivative $df(x)$; If we only consider the result, his furious charge is similar to the <a href="https://marvinlsj.github.io/2018/11/04/1D%20Unconstrained%20Minimization/" target="_blank" rel="noopener">line minimization method</a> introduced last time.<br><br></p>
+<p>Let $\boldsymbol{x_k}$ be Ironhead’s location on the k-th day and $\boldsymbol{x_k}+\alpha \boldsymbol{d}$ is his location by the end of the day.<br><br></p>
+<p>$\boldsymbol{d}$ is the best descending direction he figured out by stepping out a little bit while watching the distance device, which is exactly the reverse of the derivative: $-\nabla f(\boldsymbol{x_k})$. Every morning he wake up and decide the direction $\boldsymbol{d_k}$ by his current location $\boldsymbol{x_k}$ and the help of the device $\nabla f(\boldsymbol{x_k})$.<br><br></p>
+<p>$\alpha$ is how far he traveled that day, he’ll stop at the minimum point along current direction. As long as he decided today’s direction $\boldsymbol{d_k}$, we can define $f(\alpha) = f(\boldsymbol{x_k}+\alpha\boldsymbol{d_k})$, which is the function he would like to minimize today, theoretical we can derive $f(\alpha)$ to find best $\alpha$ by $\nabla f(\alpha) = 0$, but don’t forget it’s Ironhead here, he’s better at “dash and bump into treasure” kind of thing. (Actually, it’s because we can’t ensure the function $f(\alpha)$ is derivative everywhere and it’s burdensome and hard to derive a function for every interation in implementation).<br><br></p>
+<p>After aboving analysis, we can be sure that he will eventually get to the treasure, but it seems he haven’t found the treasure yet, let’s take a look at the algorithm.<br><br></p>
+<h2 id="Steepest-Descent-Algorithm"><a href="#Steepest-Descent-Algorithm" class="headerlink" title="Steepest Descent Algorithm"></a>Steepest Descent Algorithm</h2><h3 id="Direction-Vector"><a href="#Direction-Vector" class="headerlink" title="Direction Vector"></a>Direction Vector</h3><p>For every step, $\boldsymbol{x_k}$ is the current point at k-th interation, $\boldsymbol{x_k}+\alpha\boldsymbol{d_k}$ is the next point. We want $f(\boldsymbol{x_k}+\alpha\boldsymbol{d_k})\lt f(\boldsymbol{x_k})$, expand $f(\boldsymbol{x_k}+\alpha\boldsymbol{d_k})$ using Taylor’s expansion:</p>
+<p> $$f(\boldsymbol{x_k}+\alpha\boldsymbol{d_k}) = f(\boldsymbol{x_k})+ \alpha \nabla f(\boldsymbol{x_k})^T\boldsymbol{d} + \boldsymbol{O}(\alpha^2)$$ </p>
+<p>Thus, </p>
+<p>$$f(\boldsymbol{x_k}+\alpha\boldsymbol{d_k}) - f(\boldsymbol{x_k}) = \delta f(x)= \alpha \nabla f(\boldsymbol{x_k})^T\boldsymbol{d} + \boldsymbol{O}(\alpha^2)$$</p>
+<p>For small enough $\alpha$ the term $O(\alpha^2)$ is dominated, we want $\delta f \lt 0$, that is </p>
+<p>$$\nabla f(\boldsymbol{x_k})^T\boldsymbol{d}\lt0$$</p>
+<p>The steepest descent chooses $$\boldsymbol{d_k} = -\nabla f(\boldsymbol{x_k})$$<br>so that $\nabla f(\boldsymbol{x_k})^T\boldsymbol{d}=-||\nabla f(\boldsymbol{x_k})||^2\lt0$</p>
+<h3 id="Algorithm-steps"><a href="#Algorithm-steps" class="headerlink" title="Algorithm steps"></a>Algorithm steps</h3><ol>
+<li>Input the start point $\boldsymbol{x_0}$, function $f(\boldsymbol{x})$ and $\nabla f(\boldsymbol{x})$ </li>
+<li>Start iteration(3-5) until the stopping criterion satistied, $k=0$</li>
+<li>$\boldsymbol{d_k}=-\nabla f(\boldsymbol{x_k})$ and define $f(\alpha) = f(\boldsymbol{x_k}+\alpha\boldsymbol{d_k})$ </li>
+<li>Using line search to solve $\alpha_k = argmin_a(f(\boldsymbol{x_k}+\alpha\boldsymbol{d_k}))$</li>
+<li>Update $\boldsymbol{x_{k+1}= \boldsymbol{x_k}+\alpha_k\boldsymbol{d_k}}$, set $\boldsymbol{x_k}=\boldsymbol{x_{k+1}}, k=k+1$</li>
+</ol>
+<p><strong>Stopping criterion</strong>:</p>
+<ol>
+<li><p>Set $\epsilon_G$ to be the gradient tolerance, check $||\nabla f(\boldsymbol{x_k}||\le\epsilon_G$ </p>
+</li>
+<li><p>It’s similar to the “Absolute + Relative” criterion, check successive reduction: $$|f(\boldsymbol{x_{k+1}})-f(\boldsymbol{x_k})|\le \epsilon_{abs} + \epsilon|f(\boldsymbol{x_k})|$$</p>
+</li>
+</ol>
+<h3 id="Convergence-characteristics"><a href="#Convergence-characteristics" class="headerlink" title="Convergence characteristics"></a>Convergence characteristics</h3><p>In step 4, we have $\frac{d(f(\boldsymbol{x_k}+\alpha\boldsymbol{d_k}))}{d\alpha}=0$, thus get $\nabla f(\boldsymbol{x_k}+ \alpha_k\boldsymbol{d_k}^T)\boldsymbol{d_k}=0$ or $\nabla f(\boldsymbol{x_{k+1}})^T\boldsymbol{d_k}=0$, since $\boldsymbol{d_{k+1}}=-\nabla f(\boldsymbol{x_{k+1}})$, we have $\boldsymbol{d_{k+1}}^T\boldsymbol{d_k}=0$. Therefore, each step is orthogonal to previous step.</p>
+<p>It has been proven that the speed of convergence is related to the <strong>spectral condition number of the Hessian matrix</strong> $\kappa$. The spectral condition number $\kappa$ of a symmetric positive definite matrx is defined as </p>
+<p>$$\kappa = \frac{\lambda_{max}}{\lambda_{min}}$$ </p>
+<p>For well-conditioned Hessian matrices, the condition number is close to unity, contours are more circular; Higher the condition number, more ill-conditioned is the Hessian, the contours are more elliptical, thus there will need more zigzag to reach the optimum.</p>
+<p><img src="https://github.com/MarvinLSJ/CS268_Optimization/blob/master/notes/images/image-20181105123322721.png?raw=true" alt="image-20181105123322721"></p>
+<p>There are two main aspects regarding convergence:</p>
+<ol>
+<li>The steepest descent is convergent from any starting point under mild conditions.</li>
+<li>The method has a linear rate of convergence. Specifically, if the Hessian at the optimum is positive definite with spectral condition number $\kappa$, the sequence of function values at each iteration satisfy $$f_{k+1}-f^\star = \frac{(\kappa-1)^2}{(\kappa+1)^2}[f_k-f^\star]$$</li>
+</ol>
+<h3 id="Implementation"><a href="#Implementation" class="headerlink" title="Implementation"></a>Implementation</h3><p><a href="https://github.com/MarvinLSJ/CS268_Optimization/blob/master/hw2/hw2.ipynb" target="_blank" rel="noopener">Steepest descent</a> is implemented and experimented in python on my github.</p>
+<h2 id="The-treasure"><a href="#The-treasure" class="headerlink" title="The treasure"></a>The treasure</h2><p>Finally, Ironhead has found the treasure chest, let’s see what’s inside!</p>
+<p><img src="https://github.com/MarvinLSJ/CS268_Optimization/blob/master/notes/images/treasure.jpg?raw=true" alt="treasure"></p>
+<p>Emmm… I guess we’ll see Conjugate Gradient next time!<br><br></p>
+</section>
+    <!-- Tags START -->
+    
+      <div class="tags">
+        <span>Tags:</span>
+        
+  <a href="/tags#Optimization">
+    <span class="tag-code">Optimization</span>
+  </a>
+
+  <a href="/tags#Theoretical Foundation">
+    <span class="tag-code">Theoretical Foundation</span>
+  </a>
+
+      </div>
+    
+    <!-- Tags END -->
+    <!-- NAV START -->
+    
+  <div class="nav-container">
+    <!-- reverse left and right to put prev and next in a more logic postition -->
+    
+      <a class="nav-left" href="/2018/11/04/1D Unconstrained Minimization/">
+        <span class="nav-arrow">← </span>
+        
+          1D Unconstrained Minimization
+        
+      </a>
+    
+    
+  </div>
+
+    <!-- NAV END -->
+    <!-- 打赏 START -->
+    
+      <div class="money-like">
+        <div class="reward-btn">
+          赏
+          <span class="money-code">
+            <span class="alipay-code">
+              <div class="code-image"></div>
+              <b>使用支付宝打赏</b>
+            </span>
+            <span class="wechat-code">
+              <div class="code-image"></div>
+              <b>使用微信打赏</b>
+            </span>
+          </span>
+        </div>
+        <p class="notice">若你觉得我的文章对你有帮助，欢迎点击上方按钮对我打赏</p>
+      </div>
+    
+    <!-- 打赏 END -->
+    <!-- 二维码 START -->
+    
+      <div class="qrcode">
+        <canvas id="share-qrcode"></canvas>
+        <p class="notice">扫描二维码，分享此文章</p>
+      </div>
+    
+    <!-- 二维码 END -->
+    
+      <!-- Gitment START -->
+      <div id="comments"></div>
+      <!-- Gitment END -->
+    
+  </article>
+  <!-- Article END -->
+  <!-- Catalog START -->
+  
+    <aside class="catalog-container">
+  <div class="toc-main">
+    <strong class="toc-title">Catalog</strong>
+    
+      <ol class="toc-nav"><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#Ironhead’s-treasure-trip"><span class="toc-nav-text">Ironhead’s treasure trip</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#Calm-down-and-analyze"><span class="toc-nav-text">Calm down and analyze</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#Steepest-Descent-Algorithm"><span class="toc-nav-text">Steepest Descent Algorithm</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#Direction-Vector"><span class="toc-nav-text">Direction Vector</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#Algorithm-steps"><span class="toc-nav-text">Algorithm steps</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#Convergence-characteristics"><span class="toc-nav-text">Convergence characteristics</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#Implementation"><span class="toc-nav-text">Implementation</span></a></li></ol></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#The-treasure"><span class="toc-nav-text">The treasure</span></a></li></ol>
+    
+  </div>
+</aside>
+  
+  <!-- Catalog END -->
+</main>
+
+<script>
+  (function () {
+    var url = 'http://yoursite.com/2018/11/05/Steepest Descent/';
+    var banner = ''
+    if (banner !== '' && banner !== 'undefined' && banner !== 'null') {
+      $('#article-banner').css({
+        'background-image': 'url(' + banner + ')'
+      })
+    } else {
+      $('#article-banner').geopattern(url)
+    }
+    $('.header').removeClass('fixed-header')
+
+     // error image
+    $(".markdown-content img").on('error', function() {
+      $(this).attr('src', 'http://file.muyutech.com/error-img.png')
+      $(this).css({
+        'cursor': 'default'
+      })
+    })
+
+    // zoom image
+    $(".markdown-content img").on('click', function() {
+      var src = $(this).attr('src')
+      if (src !== 'http://file.muyutech.com/error-img.png') {
+        var imageW = $(this).width()
+        var imageH = $(this).height()
+        
+        var zoom = ($(window).width() * 0.95 / imageW).toFixed(2)
+        zoom = zoom < 1 ? 1 : zoom
+        zoom = zoom > 2 ? 2 : zoom
+        var transY = (($(window).height() - imageH) / 2).toFixed(2)
+
+        $('body').append('<div class="image-view-wrap"><div class="image-view-inner"><img src="'+ src +'" /></div></div>')
+        $('.image-view-wrap').addClass('wrap-active')
+        $('.image-view-wrap img').css({
+          'width': `${imageW}`,
+          'transform': `translate3d(0, ${transY}px, 0) scale3d(${zoom}, ${zoom}, 1)`
+        })
+        $('html').css('overflow', 'hidden')
+
+        $('.image-view-wrap').on('click', function() {
+          $(this).remove()
+          $('html').attr('style', '')
+        })
+      }
+    })
+
+    // qrcode
+    var qr = new QRious({
+      element: document.getElementById('share-qrcode'),
+      value: document.location.href
+    });
+
+    // gitment
+    var gitmentConfig = "yanm1ng";
+    if (gitmentConfig !== 'undefined') {
+      var gitment = new Gitment({
+        id: "Steepest Descent",
+        owner: "yanm1ng",
+        repo: "yanm1ng.github.io",
+        oauth: {
+          client_id: "0f87e490e00ee3fd87ef",
+          client_secret: "4a9d2b148e7971c2201ad12131ce8bf8159ccd2e"
+        },
+        theme: {
+          render(state, instance) {
+            const container = document.createElement('div')
+            container.lang = "en-US"
+            container.className = 'gitment-container gitment-root-container'
+            container.appendChild(instance.renderHeader(state, instance))
+            container.appendChild(instance.renderEditor(state, instance))
+            container.appendChild(instance.renderComments(state, instance))
+            container.appendChild(instance.renderFooter(state, instance))
+            return container;
+          }
+        }
+      })
+      gitment.render(document.getElementById('comments'))
+    }
+  })();
+</script>
+
+<script>
+  var disqus_shortname = '';
+  
+  var disqus_url = 'http://yoursite.com/2018/11/05/Steepest Descent/';
+  
+  (function(){
+    var dsq = document.createElement('script');
+    dsq.type = 'text/javascript';
+    dsq.async = true;
+    dsq.src = '//go.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+  })();
+</script>
+
+    <div class="scroll-top">
+  <span class="arrow-icon"></span>
+</div>
+    <footer class="app-footer">
+  <p class="copyright">
+    &copy; 2018 | Proudly powered by <a href="https://hexo.io" target="_blank">Hexo</a>
+    <br>
+    Theme by <a href="https://github.com/yanm1ng">yanm1ng</a>
+  </p>
+</footer>
+
+<script>
+  function async(u, c) {
+    var d = document, t = 'script',
+      o = d.createElement(t),
+      s = d.getElementsByTagName(t)[0];
+    o.src = u;
+    if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+    s.parentNode.insertBefore(o, s);
+  }
+</script>
+<script>
+  async("//cdn.bootcss.com/fastclick/1.0.6/fastclick.min.js", function(){
+    FastClick.attach(document.body);
+  })
+</script>
+
+<script>
+  var hasLine = 'true';
+  async("//cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js", function(){
+    $('figure pre').each(function(i, block) {
+      var figure = $(this).parents('figure');
+      if (hasLine === 'false') {
+        figure.find('.gutter').hide();
+      }
+      var lang = figure.attr('class').split(' ')[1] || 'code';
+      var codeHtml = $(this).html();
+      var codeTag = document.createElement('code');
+      codeTag.className = lang;
+      codeTag.innerHTML = codeHtml;
+      $(this).attr('class', '').empty().html(codeTag);
+      figure.attr('data-lang', lang.toUpperCase());
+      hljs.highlightBlock(block);
+    });
+  })
+</script>
+<!-- Baidu Tongji -->
+
+<script src="/js/script.js"></script>
+  </body>
+</html>
