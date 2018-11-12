@@ -148,11 +148,11 @@
   <!-- Article START -->
   <article class="post-article">
     <section class="markdown-content"><p><br></p>
-<h2 id="1-应用背景"><a href="#1-应用背景" class="headerlink" title="1. 应用背景"></a>1. 应用背景</h2><p>实习中遇到一项工作：对语义重复或语义近似的POI标签进行筛查，该项工作可以进一步可以引申为计算短语相似度问题，这里用我自己简单明了的解决方法抛砖引玉，希望能提供一些思路，促进大家交流。</p>
+<h2 id="应用背景"><a href="#应用背景" class="headerlink" title="应用背景"></a>应用背景</h2><p>实习中遇到一项工作：对语义重复或语义近似的POI标签进行筛查，该项工作可以进一步可以引申为计算短语相似度问题，这里用我自己简单明了的解决方法抛砖引玉，希望能提供一些思路，促进大家交流。</p>
 <p><br></p>
-<h2 id="2-主要思路"><a href="#2-主要思路" class="headerlink" title="2. 主要思路"></a>2. 主要思路</h2><p>该算法的基本思路为用不同方法向量化表示短语，转化为短语向量后再两两计算相似度。</p>
+<h2 id="主要思路"><a href="#主要思路" class="headerlink" title="主要思路"></a>主要思路</h2><p>该算法的基本思路为用不同方法向量化表示短语，转化为短语向量后再两两计算相似度。</p>
 <p><br></p>
-<h2 id="3-算法细节"><a href="#3-算法细节" class="headerlink" title="3. 算法细节"></a>3. 算法细节</h2><h3 id="1-中文词嵌入"><a href="#1-中文词嵌入" class="headerlink" title="1. 中文词嵌入"></a>1. 中文词嵌入</h3><p>选取 <a href="https://github.com/Embedding/Chinese-Word-Vectors" target="_blank" rel="noopener">中文词向量汇总</a> 中的300维 Mixed-large，由百度百科、中文维基百科、人民日报、搜狗新闻等等语料训练出包含单个汉字、词语的字词嵌入表示。</p>
+<h2 id="算法细节"><a href="#算法细节" class="headerlink" title="算法细节"></a>算法细节</h2><h3 id="1-中文词嵌入"><a href="#1-中文词嵌入" class="headerlink" title="1. 中文词嵌入"></a>1. 中文词嵌入</h3><p>选取 <a href="https://github.com/Embedding/Chinese-Word-Vectors" target="_blank" rel="noopener">中文词向量汇总</a> 中的300维 Mixed-large，由百度百科、中文维基百科、人民日报、搜狗新闻等等语料训练出包含单个汉字、词语的字词嵌入表示。</p>
 <p><br></p>
 <h3 id="2-分词方法"><a href="#2-分词方法" class="headerlink" title="2. 分词方法"></a>2. 分词方法</h3><p><a href="https://github.com/fxsjy/jieba" target="_blank" rel="noopener">jieba分词</a> 精确模式分词，标签短语结构简单，往往只是名词+形容词或者单个或多个形容词，jieba分词就能基本满足分词要求。</p>
 <p><br></p>
@@ -188,13 +188,13 @@
 <p><br></p>
 <h3 id="5-Stacking"><a href="#5-Stacking" class="headerlink" title="5. Stacking"></a>5. Stacking</h3><p>考虑到两种表示方法各有优点，能侧重短语不同方面的表示，所以做stacking结合两者优点：首先用word centroid粗晒，用 quickSort 选取各标签最相似的Top20，再在Top20的基础上用 Word Movers’ Distance 选取 Top5</p>
 <p><br></p>
-<h2 id="4-代码实现及算法结果"><a href="#4-代码实现及算法结果" class="headerlink" title="4. 代码实现及算法结果"></a>4. 代码实现及算法结果</h2><p>代码实现短语相似度算法: <a href="https://github.com/MarvinLSJ/meituan/blob/master/similar_tags.ipynb" target="_blank" rel="noopener">Jupyter Notebook Link</a></p>
+<h2 id="代码实现及算法结果"><a href="#代码实现及算法结果" class="headerlink" title="代码实现及算法结果"></a>代码实现及算法结果</h2><p>代码实现短语相似度算法: <a href="https://github.com/MarvinLSJ/meituan/blob/master/similar_tags.ipynb" target="_blank" rel="noopener">Jupyter Notebook Link</a></p>
 <p><br><br><strong>1. Result of Word Centroid / 词义中心结果</strong></p>
 <p><img src="https://github.com/MarvinLSJ/meituan/blob/master/image-20181111123155343.png?raw=true" alt="image-20181111123155343"></p>
 <p><br><br><strong>2. Result of Linear Combination of Word Centroid and Word Mover’s Distance / 最终结果</strong></p>
 <p><img src="https://github.com/MarvinLSJ/meituan/blob/master/image-20181111123248824.png?raw=true" alt="image-20181111123248824"></p>
 <p><br></p>
-<h2 id="5-改进方向"><a href="#5-改进方向" class="headerlink" title="5. 改进方向"></a>5. 改进方向</h2><ol>
+<h2 id="改进方向"><a href="#改进方向" class="headerlink" title="改进方向"></a>改进方向</h2><ol>
 <li><p>加入深度学习方法（Promising）</p>
 <p>利用AutoEncoder对短语进行编码，计算编码后向量的相似度。</p>
 <p>AutoEncoder能很好的编码语义信息，可以在一定程度上解决语义理解和词序的问题。</p>
@@ -282,7 +282,7 @@
   <div class="toc-main">
     <strong class="toc-title">Catalog</strong>
     
-      <ol class="toc-nav"><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#1-应用背景"><span class="toc-nav-text">1. 应用背景</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#2-主要思路"><span class="toc-nav-text">2. 主要思路</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#3-算法细节"><span class="toc-nav-text">3. 算法细节</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#1-中文词嵌入"><span class="toc-nav-text">1. 中文词嵌入</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#2-分词方法"><span class="toc-nav-text">2. 分词方法</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#3-相似度表示方法"><span class="toc-nav-text">3. 相似度表示方法</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#4-短语表示方法"><span class="toc-nav-text">4. 短语表示方法</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#5-Stacking"><span class="toc-nav-text">5. Stacking</span></a></li></ol></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#4-代码实现及算法结果"><span class="toc-nav-text">4. 代码实现及算法结果</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#5-改进方向"><span class="toc-nav-text">5. 改进方向</span></a></li></ol>
+      <ol class="toc-nav"><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#应用背景"><span class="toc-nav-text">应用背景</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#主要思路"><span class="toc-nav-text">主要思路</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#算法细节"><span class="toc-nav-text">算法细节</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#1-中文词嵌入"><span class="toc-nav-text">1. 中文词嵌入</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#2-分词方法"><span class="toc-nav-text">2. 分词方法</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#3-相似度表示方法"><span class="toc-nav-text">3. 相似度表示方法</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#4-短语表示方法"><span class="toc-nav-text">4. 短语表示方法</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#5-Stacking"><span class="toc-nav-text">5. Stacking</span></a></li></ol></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#代码实现及算法结果"><span class="toc-nav-text">代码实现及算法结果</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#改进方向"><span class="toc-nav-text">改进方向</span></a></li></ol>
     
   </div>
 </aside>
