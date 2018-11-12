@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html>
+  <head><meta name="generator" content="Hexo 3.8.0">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+  <meta name="description" content="yanm1ng&#39;s blog">
+  <meta name="keyword" content="hexo-theme, vuejs">
+  
+    <link rel="shortcut icon" href="/css/images/logo.png">
+  
+  <title>
+    
+      短语相似度算法 - Simple Phrase Similarity Algorithm | Perceptron
+    
+  </title>
+  <link href="//cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+  <link href="//cdn.bootcss.com/nprogress/0.2.0/nprogress.min.css" rel="stylesheet">
+  <link href="//cdn.bootcss.com/highlight.js/9.12.0/styles/tomorrow.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="/css/style.css">
+<link rel="stylesheet" href="/css/plugins/gitment.css">
+  <script src="//cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
+  <script src="//cdn.bootcss.com/geopattern/1.2.3/js/geopattern.min.js"></script>
+  <script src="//cdn.bootcss.com/nprogress/0.2.0/nprogress.min.js"></script>
+  <script src="/js/qrious.js"></script>
+<script src="/js/gitment.js"></script>
+  
+  
+    <!-- MathJax support START -->
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdn.bootcss.com/mathjax/2.7.1/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <!-- MathJax support END -->
+  
+
+
+</head>
+<div class="wechat-share">
+  <img src="/css/images/logo.png">
+</div>
+
+  <body>
+    <header class="header fixed-header">
+  <div class="header-container">
+    <a class="home-link" href="/">
+      <div class="logo"></div>
+      <span>Perceptron</span>
+    </a>
+    <ul class="right-list">
+      
+        <li class="list-item">
+          
+            <a href="/" class="item-link">Home</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/tags/" class="item-link">Tags</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/archives/" class="item-link">Archives</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/project/" class="item-link">Projects</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/about/" class="item-link">About</a>
+          
+        </li>
+      
+    </ul>
+    <div class="menu">
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+    </div>
+    <div class="menu-mask">
+      <ul class="menu-list">
+        
+          <li class="menu-item">
+            
+              <a href="/" class="menu-link">Home</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/tags/" class="menu-link">Tags</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/archives/" class="menu-link">Archives</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/project/" class="menu-link">Projects</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/about/" class="menu-link">About</a>
+            
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</header>
+
+    <div id="article-banner">
+  <h2>短语相似度算法 - Simple Phrase Similarity Algorithm</h2>
+  <p class="post-date">2018-11-05</p>
+  <div class="arrow-down">
+    <a href="javascript:;"></a>
+  </div>
+</div>
+<main class="app-body flex-box">
+  <!-- Article START -->
+  <article class="post-article">
+    <section class="markdown-content"><p><br></p>
+<h2 id="1-应用背景"><a href="#1-应用背景" class="headerlink" title="1. 应用背景"></a>1. 应用背景</h2><p>实习中遇到一项工作：对语义重复或语义近似的POI标签进行筛查，该项工作可以进一步可以引申为计算短语相似度问题，这里用我自己简单明了的解决方法抛砖引玉，希望能提供一些思路，促进大家交流。</p>
+<p><br></p>
+<h2 id="2-主要思路"><a href="#2-主要思路" class="headerlink" title="2. 主要思路"></a>2. 主要思路</h2><p>该算法的基本思路为用不同方法向量化表示短语，转化为短语向量后再两两计算相似度。</p>
+<p><br></p>
+<h2 id="3-算法细节"><a href="#3-算法细节" class="headerlink" title="3. 算法细节"></a>3. 算法细节</h2><h3 id="1-中文词嵌入"><a href="#1-中文词嵌入" class="headerlink" title="1. 中文词嵌入"></a>1. 中文词嵌入</h3><p>选取 <a href="https://github.com/Embedding/Chinese-Word-Vectors" target="_blank" rel="noopener">中文词向量汇总</a> 中的300维 Mixed-large，由百度百科、中文维基百科、人民日报、搜狗新闻等等语料训练出包含单个汉字、词语的字词嵌入表示。</p>
+<p><br></p>
+<h3 id="2-分词方法"><a href="#2-分词方法" class="headerlink" title="2. 分词方法"></a>2. 分词方法</h3><p><a href="https://github.com/fxsjy/jieba" target="_blank" rel="noopener">jieba分词</a> 精确模式分词，标签短语结构简单，往往只是名词+形容词或者单个或多个形容词，jieba分词就能基本满足分词要求。</p>
+<p><br></p>
+<h3 id="3-相似度表示方法"><a href="#3-相似度表示方法" class="headerlink" title="3. 相似度表示方法"></a>3. 相似度表示方法</h3><p>向量化表示短语后，短语相似度问题就变为300维向量相似度问题，由于Embedding后向量表示高度抽象化，也就是说300维中各个维度难以用浅层特征来描述，所以这里采用<a href="https://zh.wikipedia.org/wiki/%E4%BD%99%E5%BC%A6%E7%9B%B8%E4%BC%BC%E6%80%A7" target="_blank" rel="noopener">余弦相似度 (cosine similarity)</a>。</p>
+<p><br></p>
+<h3 id="4-短语表示方法"><a href="#4-短语表示方法" class="headerlink" title="4. 短语表示方法"></a>4. 短语表示方法</h3><p><strong>a. Word Centroid 词义中心</strong><br><br></p>
+<p>思想：将短语分词后的各部分Embedding取平均值<br><br></p>
+<p>优点: 考虑到标签短语较短，在分词或分字后不会有太多部分，所以该方法表示能在一定程度上得到短语整体的语义信息<br><br></p>
+<p>缺点:  </p>
+<ol>
+<li><p>长短不一短语效果不好 </p>
+</li>
+<li><p>词序，同样的词顺序不同的情况无法分辨 </p>
+<p>similarity(‘好吃不贵’,’好贵不吃’,’cosine’) = 2.5125567e-07</p>
+</li>
+<li><p>否定词，否定词效果不明显</p>
+<p>similarity(‘好吃’,’不好吃’,’cosine’) = 2.1768517<br>similarity(‘好吃’,’难吃’,’cosine’) = 3.7945359</p>
+</li>
+<li><p>语义理解</p>
+<p>similarity(‘老板热情’,’服务周到’,’cosine’) = 4.8603044</p>
+</li>
+</ol>
+<p><br></p>
+<p><strong>b. Word Movers’ Distance 词移距离</strong><br><br></p>
+<p>网上没有找到WMD的官方翻译，所以按照自己的理解翻译了一下，该方法源自于 2015 年的一篇论文 <a href="http://proceedings.mlr.press/v37/kusnerb15.pdf" target="_blank" rel="noopener"><em>From Word Embeddings To Document Distances</em></a>。这篇论文原本是基于word2vec的文档向量化表示，移用WMD作为短语向量表示的主要原因是在短语比较中，WMD能在不考虑词序的情况下匹配两个短语中的相同语义部分。<br><br></p>
+<p><img src="https://camo.githubusercontent.com/c02a4888f1d89ed9ca7191480a24916bb146c2bd/68747470733a2f2f63646e2d696d616765732d312e6d656469756d2e636f6d2f6d61782f313630302f312a4a4943415a4d3067526a44396b53794d5a746d3939512e706e67" alt="image-20181111122827219"></p>
+<p>思想：对 短语1 中的每一个词，遍历 短语2 中的所有词算cosine距离，把 短语1 中每个词对应最低的距离相加后平均，作为这两个短语的距离<br><br></p>
+<p>优点: </p>
+<ol>
+<li>该方法能一定程度上忽略词序对短语表示的影响，因为很多重复标签都是由于词序颠倒被错误添加，该方法能很好的解决这个问题。</li>
+<li>距离计算次数由第一个短语决定，所以对长短不一的短语效果有提升。</li>
+</ol>
+<p><br></p>
+<h3 id="5-Stacking"><a href="#5-Stacking" class="headerlink" title="5. Stacking"></a>5. Stacking</h3><p>考虑到两种表示方法各有优点，能侧重短语不同方面的表示，所以做stacking结合两者优点：首先用word centroid粗晒，用 quickSort 选取各标签最相似的Top20，再在Top20的基础上用 Word Movers’ Distance 选取 Top5</p>
+<p><br></p>
+<h2 id="4-代码实现及算法结果"><a href="#4-代码实现及算法结果" class="headerlink" title="4. 代码实现及算法结果"></a>4. 代码实现及算法结果</h2><p>代码实现短语相似度算法: <a href="https://github.com/MarvinLSJ/meituan/blob/master/similar_tags.ipynb" target="_blank" rel="noopener">Jupyter Notebook Link</a></p>
+<p><br><br><strong>1. Result of Word Centroid / 词义中心结果</strong></p>
+<p><img src="https://github.com/MarvinLSJ/meituan/blob/master/image-20181111123155343.png?raw=true" alt="image-20181111123155343"></p>
+<p><br><br><strong>2. Result of Linear Combination of Word Centroid and Word Mover’s Distance / 最终结果</strong></p>
+<p><img src="https://github.com/MarvinLSJ/meituan/blob/master/image-20181111123248824.png?raw=true" alt="image-20181111123248824"></p>
+<p><br></p>
+<h2 id="5-改进方向"><a href="#5-改进方向" class="headerlink" title="5. 改进方向"></a>5. 改进方向</h2><ol>
+<li><p>加入深度学习方法（Promising）</p>
+<p>利用AutoEncoder对短语进行编码，计算编码后向量的相似度。</p>
+<p>AutoEncoder能很好的编码语义信息，可以在一定程度上解决语义理解和词序的问题。</p>
+<p>在此处Stacking后的结果上进一步优化</p>
+</li>
+</ol>
+</section>
+    <!-- Tags START -->
+    
+      <div class="tags">
+        <span>Tags:</span>
+        
+  <a href="/tags#NLP">
+    <span class="tag-code">NLP</span>
+  </a>
+
+  <a href="/tags#Original thoughts">
+    <span class="tag-code">Original thoughts</span>
+  </a>
+
+      </div>
+    
+    <!-- Tags END -->
+    <!-- NAV START -->
+    
+  <div class="nav-container">
+    <!-- reverse left and right to put prev and next in a more logic postition -->
+    
+      <a class="nav-left" href="/2018/11/05/Steepest Descent/">
+        <span class="nav-arrow">← </span>
+        
+          Steepest Descent
+        
+      </a>
+    
+    
+  </div>
+
+    <!-- NAV END -->
+    <!-- 打赏 START -->
+    
+      <div class="money-like">
+        <div class="reward-btn">
+          赏
+          <span class="money-code">
+            <span class="alipay-code">
+              <div class="code-image"></div>
+              <b>使用支付宝打赏</b>
+            </span>
+            <span class="wechat-code">
+              <div class="code-image"></div>
+              <b>使用微信打赏</b>
+            </span>
+          </span>
+        </div>
+        <p class="notice">若你觉得我的文章对你有帮助，欢迎点击上方按钮对我打赏</p>
+      </div>
+    
+    <!-- 打赏 END -->
+    <!-- 二维码 START -->
+    
+      <div class="qrcode">
+        <canvas id="share-qrcode"></canvas>
+        <p class="notice">扫描二维码，分享此文章</p>
+      </div>
+    
+    <!-- 二维码 END -->
+    
+      <!-- Gitment START -->
+      <div id="comments"></div>
+      <!-- Gitment END -->
+    
+  </article>
+  <!-- Article END -->
+  <!-- Catalog START -->
+  
+    <aside class="catalog-container">
+  <div class="toc-main">
+    <strong class="toc-title">Catalog</strong>
+    
+      <ol class="toc-nav"><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#1-应用背景"><span class="toc-nav-text">1. 应用背景</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#2-主要思路"><span class="toc-nav-text">2. 主要思路</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#3-算法细节"><span class="toc-nav-text">3. 算法细节</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#1-中文词嵌入"><span class="toc-nav-text">1. 中文词嵌入</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#2-分词方法"><span class="toc-nav-text">2. 分词方法</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#3-相似度表示方法"><span class="toc-nav-text">3. 相似度表示方法</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#4-短语表示方法"><span class="toc-nav-text">4. 短语表示方法</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#5-Stacking"><span class="toc-nav-text">5. Stacking</span></a></li></ol></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#4-代码实现及算法结果"><span class="toc-nav-text">4. 代码实现及算法结果</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#5-改进方向"><span class="toc-nav-text">5. 改进方向</span></a></li></ol>
+    
+  </div>
+</aside>
+  
+  <!-- Catalog END -->
+</main>
+
+<script>
+  (function () {
+    var url = 'http://yoursite.com/2018/11/05/简明短语相似度算法/';
+    var banner = ''
+    if (banner !== '' && banner !== 'undefined' && banner !== 'null') {
+      $('#article-banner').css({
+        'background-image': 'url(' + banner + ')'
+      })
+    } else {
+      $('#article-banner').geopattern(url)
+    }
+    $('.header').removeClass('fixed-header')
+
+     // error image
+    $(".markdown-content img").on('error', function() {
+      $(this).attr('src', 'http://file.muyutech.com/error-img.png')
+      $(this).css({
+        'cursor': 'default'
+      })
+    })
+
+    // zoom image
+    $(".markdown-content img").on('click', function() {
+      var src = $(this).attr('src')
+      if (src !== 'http://file.muyutech.com/error-img.png') {
+        var imageW = $(this).width()
+        var imageH = $(this).height()
+        
+        var zoom = ($(window).width() * 0.95 / imageW).toFixed(2)
+        zoom = zoom < 1 ? 1 : zoom
+        zoom = zoom > 2 ? 2 : zoom
+        var transY = (($(window).height() - imageH) / 2).toFixed(2)
+
+        $('body').append('<div class="image-view-wrap"><div class="image-view-inner"><img src="'+ src +'" /></div></div>')
+        $('.image-view-wrap').addClass('wrap-active')
+        $('.image-view-wrap img').css({
+          'width': `${imageW}`,
+          'transform': `translate3d(0, ${transY}px, 0) scale3d(${zoom}, ${zoom}, 1)`
+        })
+        $('html').css('overflow', 'hidden')
+
+        $('.image-view-wrap').on('click', function() {
+          $(this).remove()
+          $('html').attr('style', '')
+        })
+      }
+    })
+
+    // qrcode
+    var qr = new QRious({
+      element: document.getElementById('share-qrcode'),
+      value: document.location.href
+    });
+
+    // gitment
+    var gitmentConfig = "MarvinLSJ";
+    if (gitmentConfig !== 'undefined') {
+      var gitment = new Gitment({
+        id: "短语相似度算法 - Simple Phrase Similarity Algorithm",
+        owner: "MarvinLSJ",
+        repo: "marvinlsj.github.io",
+        oauth: {
+          client_id: "3905cc98028f883d11e3",
+          client_secret: "67bbb168f8a05e89248865dba4dcdd684072f5af"
+        },
+        theme: {
+          render(state, instance) {
+            const container = document.createElement('div')
+            container.lang = "en-US"
+            container.className = 'gitment-container gitment-root-container'
+            container.appendChild(instance.renderHeader(state, instance))
+            container.appendChild(instance.renderEditor(state, instance))
+            container.appendChild(instance.renderComments(state, instance))
+            container.appendChild(instance.renderFooter(state, instance))
+            return container;
+          }
+        }
+      })
+      gitment.render(document.getElementById('comments'))
+    }
+  })();
+</script>
+
+<script>
+  var disqus_shortname = '';
+  
+  var disqus_url = 'http://yoursite.com/2018/11/05/简明短语相似度算法/';
+  
+  (function(){
+    var dsq = document.createElement('script');
+    dsq.type = 'text/javascript';
+    dsq.async = true;
+    dsq.src = '//go.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+  })();
+</script>
+
+    <div class="scroll-top">
+  <span class="arrow-icon"></span>
+</div>
+    <footer class="app-footer">
+  <p class="copyright">
+    &copy; 2018 | Proudly powered by <a href="https://hexo.io" target="_blank">Hexo</a>
+    <br>
+    Theme by <a href="https://github.com/yanm1ng">yanm1ng</a>
+  </p>
+</footer>
+
+<script>
+  function async(u, c) {
+    var d = document, t = 'script',
+      o = d.createElement(t),
+      s = d.getElementsByTagName(t)[0];
+    o.src = u;
+    if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+    s.parentNode.insertBefore(o, s);
+  }
+</script>
+<script>
+  async("//cdn.bootcss.com/fastclick/1.0.6/fastclick.min.js", function(){
+    FastClick.attach(document.body);
+  })
+</script>
+
+<script>
+  var hasLine = 'true';
+  async("//cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js", function(){
+    $('figure pre').each(function(i, block) {
+      var figure = $(this).parents('figure');
+      if (hasLine === 'false') {
+        figure.find('.gutter').hide();
+      }
+      var lang = figure.attr('class').split(' ')[1] || 'code';
+      var codeHtml = $(this).html();
+      var codeTag = document.createElement('code');
+      codeTag.className = lang;
+      codeTag.innerHTML = codeHtml;
+      $(this).attr('class', '').empty().html(codeTag);
+      figure.attr('data-lang', lang.toUpperCase());
+      hljs.highlightBlock(block);
+    });
+  })
+</script>
+<!-- Baidu Tongji -->
+
+<script src="/js/script.js"></script>
+  </body>
+</html>
