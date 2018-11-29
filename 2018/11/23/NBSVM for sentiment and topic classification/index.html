@@ -153,9 +153,7 @@
 <li>A novel way: SVM using NB log-count ratios variant as feature.</li>
 <li>MNB is normally better and more stable than multivariable Bernouli NBm and binarized MNB is better than standard MNB.</li>
 </ol>
-<p><br></p>
-<h2 id="Model"><a href="#Model" class="headerlink" title="Model"></a>Model</h2><p><br></p>
-<h3 id="main-model-variants"><a href="#main-model-variants" class="headerlink" title="main model variants"></a>main model variants</h3><p>Linear classifiers: $$y^{(k)}=sign(\boldsymbol{w}^T\boldsymbol{x}^{(k)}+b)$$</p>
+<h2 id="Model"><a href="#Model" class="headerlink" title="Model"></a>Model</h2><h3 id="main-model-variants"><a href="#main-model-variants" class="headerlink" title="main model variants"></a>main model variants</h3><p>Linear classifiers: $$y^{(k)}=sign(\boldsymbol{w}^T\boldsymbol{x}^{(k)}+b)$$</p>
 <p>$\boldsymbol{f}^{(i)}\in R^{|V|}$ is the feature count vector for training case i with label $y^{(i)}\in{-1,1}$, $V$ is the set of features, $\boldsymbol{f}_j^{(i)}$  represents the number of  occurences of feature $V_j$ in training case $i$.$$\boldsymbol{p}=\alpha + \sum_{i:y^{(i)}=1}\boldsymbol{f}^{(i)}$$ and $$\boldsymbol{q}=\alpha + \sum_{i:y^{(i)}=-1}\boldsymbol{f}^{(i)}$$ for smoothing parameter $\alpha$. The log-count ratio is: </p>
 <p>$$\boldsymbol{r} = log(\frac{\boldsymbol{p/||\boldsymbol{p}||_1}}{\boldsymbol{q}/||\boldsymbol{q}||_1})$$</p>
 <p><br></p>
@@ -167,22 +165,19 @@
 <p>$b=\log p(C_k)​$ and $\boldsymbol{w}<em>{ki} = \log{p</em>{ki}}​$ </p>
 <p>Smoothing is needed because if a given class and feature value never occur together in the training data, then the frequency-based probability estimate will be zero.</p>
 <p><br></p>
-<h2 id="Application-in-Quora-Insincere-Question-Classification"><a href="#Application-in-Quora-Insincere-Question-Classification" class="headerlink" title="Application in Quora Insincere Question Classification"></a>Application in Quora Insincere Question Classification</h2><p><br></p>
-<h3 id="Theory-Explanation"><a href="#Theory-Explanation" class="headerlink" title="Theory Explanation"></a>Theory Explanation</h3><p>We are given 1306122 labeled training question texts and 56370 question texts to be predicted, all questions are classified as either Insincere or Sincere. </p>
-<p>To begin with, we want to know the probability of classification of a given sentence: $ P(Class|Sentence) $, since we only have two classes 0,1. We can determine the class by dividing them:  </p>
+<h2 id="Application-in-Quora-Insincere-Question-Classification"><a href="#Application-in-Quora-Insincere-Question-Classification" class="headerlink" title="Application in Quora Insincere Question Classification"></a>Application in Quora Insincere Question Classification</h2><h3 id="Theory-Explanation"><a href="#Theory-Explanation" class="headerlink" title="Theory Explanation"></a>Theory Explanation</h3><p>We are given 1306122 labeled training question texts and 56370 question texts to be predicted, all questions are classified as either Insincere or Sincere.<br><br><br>To begin with, we want to know the probability of classification of a given sentence: $ P(Class|Sentence) $, since we only have two classes 0,1. We can determine the class by dividing them:  </p>
 <p>$$result=\frac{P(C=1|S)}{P(C=0|S)}$$  </p>
-<p>If it’s bigger than 1, the sentence should be classify as 1 (insincere), otherwise 0.<br>Or just simply compare which one’s bigger.</p>
-<p>Problem here is how to get the $P(C|S)$:<br>According to Naive Bayes,   </p>
+<p>If it’s bigger than 1, the sentence should be classify as 1 (insincere), otherwise 0.   </p>
+<p><br><br>Problem here is how to get the $P(C|S)$:<br>According to Naive Bayes,   </p>
 <p>$$P(C=1|S)=\frac{P(S|C=1)P(C=1)}{P(S)},P(C=0|S)=\frac{P(S|C=0)P(C=0)}{P(S)}$$</p>
 <p>thus,<br>$$result=\frac{P(S|C=1)}{P(S|C=0)}\frac{P(C=1)}{P(C=0)}$$  </p>
 <p>$\frac{P(C=1)}{P(C=0)}$ here is a constant, which is the fraction of counts of labeled 1 and 0 question texts.    </p>
 <p>For P(S|C=1), we consider in Naive Bayes way that every word appears independently. With this assumption, we can say   </p>
-<p>$$P(S|C=1) = P(w_1|C)P(w_2|C)P(w_3|C)…P(w_n|C)$$<br>$w_i$ is the $i$-th word in sentence $S$    </p>
-<p>Thus, all we need here is $P(w|C=1)$ and $P(w|C=0)$ for all words in the bag. For every $P(S|C)$, we can just multiply words probabilities together.  </p>
+<p>$$P(S|C=1) = P(w_1|C)P(w_2|C)P(w_3|C)…P(w_n|C)$$<br>$w_i$ is the $i$-th word in sentence $S$<br><br><br>Thus, all we need here is $P(w|C=1)$ and $P(w|C=0)$ for all words in the bag. For every $P(S|C)$, we can just multiply words probabilities together.  </p>
 <p>Therefore,<br>$$result=\frac{\prod_{i=0}^nP(w_i|C=1)}{\prod_{i=0}^nP(w_i|C=0)}\frac{P(C=1)}{P(C=0)}$$   </p>
 <p>Define log ratio by taking log from result:<br>$$r =\log\frac{ratio\ of\ word\ w\ in\ class\ 1}{ratio\ of\ word\ w\ in\ class\ 0}= \log\frac{\frac{\boldsymbol{p}}{||\boldsymbol{p}||}}{\frac{\boldsymbol{q}}{||\boldsymbol{q}||}} $$  </p>
 <p>$\boldsymbol{p}$ here is obtained by adding up every feature(words) in each row(sentence) who belongs to class 1, that gives us $\sum_{i=0}^nlog{P(w_i|C=1)}$. $||\boldsymbol{p}||$ is the normalization term which is $\sum_{i=0}^n P(C=1)$. Considering the smoothing term to prevent the situation that some words never appear in a particular class, $\boldsymbol{p}=\alpha + \sum_{i=0}^nlog{P(w_i|C=1)}$.<br><br></p>
-<h3 id="Brief-Implementation-Explanation"><a href="#Brief-Implementation-Explanation" class="headerlink" title="Brief Implementation Explanation"></a>Brief Implementation Explanation</h3><p>Here’s the <a href="https://github.com/MarvinLSJ/Quora_Insincere_Text_Classification/blob/master/NBSVM_baseline.ipynb" target="_blank" rel="noopener">Detailed Notebook Link</a> with explanation on how to implement the NBLR in this kaggle competition.</p>
+<h3 id="Brief-Implementation-Explanation"><a href="#Brief-Implementation-Explanation" class="headerlink" title="Brief Implementation Explanation"></a>Brief Implementation Explanation</h3><p>Here’s the <a href="https://github.com/MarvinLSJ/Quora_Insincere_Text_Classification/blob/master/NBSVM_baseline.ipynb" target="_blank" rel="noopener">Detailed Notebook Link</a> with explanation on how to implement the NBLR in this kaggle competition.<br><br></p>
 <p>In python where x is the feature matrix and y is the target, $\boldsymbol{p}$ equals <code>alpha + x[y==1].sum(0)</code> and $||\boldsymbol{p}||$ is <code>alpha + (y==1).sum()</code>.</p>
 <p>We can obtain the TF-IDF matrix by:</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> re, string</span><br><span class="line">re_tok = re.compile(<span class="string">f'([<span class="subst">&#123;string.punctuation&#125;</span>“”¨«»®´·º½¾¿¡§£₤‘’])'</span>)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">tokenize</span><span class="params">(s)</span>:</span> <span class="keyword">return</span> re_tok.sub(<span class="string">' '</span>, s).split()</span><br><span class="line"></span><br><span class="line">vec = TfidfVectorizer(ngram_range=(<span class="number">1</span>,<span class="number">2</span>), tokenizer=tokenize, </span><br><span class="line">                     min_df=<span class="number">3</span>, max_df=<span class="number">0.9</span>, strip_accents=<span class="string">'unicode'</span>,</span><br><span class="line">                     use_idf=<span class="number">1</span>, smooth_idf=<span class="number">1</span>, sublinear_tf=<span class="number">1</span>)</span><br><span class="line">                     </span><br><span class="line">tr_term = vec.fit_transform(X_train)</span><br><span class="line">va_term = vec.transform(X_val)</span><br><span class="line">te_term = vec.transform(test_df[<span class="string">'question_text'</span>])</span><br></pre></td></tr></table></figure>
@@ -202,16 +197,16 @@
       <div class="tags">
         <span>Tags:</span>
         
+  <a href="/tags#Paper Reading">
+    <span class="tag-code">Paper Reading</span>
+  </a>
+
   <a href="/tags#NLP">
     <span class="tag-code">NLP</span>
   </a>
 
   <a href="/tags#Competition">
     <span class="tag-code">Competition</span>
-  </a>
-
-  <a href="/tags#Paper Reading">
-    <span class="tag-code">Paper Reading</span>
   </a>
 
       </div>
