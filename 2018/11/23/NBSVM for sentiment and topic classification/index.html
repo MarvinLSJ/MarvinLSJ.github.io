@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html>
+  <head><meta name="generator" content="Hexo 3.8.0">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+  <meta name="description" content="yanm1ng&#39;s blog">
+  <meta name="keyword" content="hexo-theme, vuejs">
+  
+    <link rel="shortcut icon" href="/css/images/logo.png">
+  
+  <title>
+    
+      NBSVM for sentiment and topic classification | Perceptron
+    
+  </title>
+  <link href="//cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+  <link href="//cdn.bootcss.com/nprogress/0.2.0/nprogress.min.css" rel="stylesheet">
+  <link href="//cdn.bootcss.com/highlight.js/9.12.0/styles/tomorrow.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="/css/style.css">
+<link rel="stylesheet" href="/css/plugins/gitment.css">
+  <script src="//cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
+  <script src="//cdn.bootcss.com/geopattern/1.2.3/js/geopattern.min.js"></script>
+  <script src="//cdn.bootcss.com/nprogress/0.2.0/nprogress.min.js"></script>
+  <script src="/js/qrious.js"></script>
+<script src="/js/gitment.js"></script>
+  
+  
+    <!-- MathJax support START -->
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdn.bootcss.com/mathjax/2.7.1/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <!-- MathJax support END -->
+  
+
+
+</head>
+<div class="wechat-share">
+  <img src="/css/images/logo.png">
+</div>
+
+  <body>
+    <header class="header fixed-header">
+  <div class="header-container">
+    <a class="home-link" href="/">
+      <div class="logo"></div>
+      <span>Perceptron</span>
+    </a>
+    <ul class="right-list">
+      
+        <li class="list-item">
+          
+            <a href="/" class="item-link">Home</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/tags/" class="item-link">Tags</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/archives/" class="item-link">Archives</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/project/" class="item-link">Projects</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/about/" class="item-link">About</a>
+          
+        </li>
+      
+    </ul>
+    <div class="menu">
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+    </div>
+    <div class="menu-mask">
+      <ul class="menu-list">
+        
+          <li class="menu-item">
+            
+              <a href="/" class="menu-link">Home</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/tags/" class="menu-link">Tags</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/archives/" class="menu-link">Archives</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/project/" class="menu-link">Projects</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/about/" class="menu-link">About</a>
+            
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</header>
+
+    <div id="article-banner">
+  <h2>NBSVM for sentiment and topic classification</h2>
+  <p class="post-date">2018-11-23</p>
+  <div class="arrow-down">
+    <a href="javascript:;"></a>
+  </div>
+</div>
+<main class="app-body flex-box">
+  <!-- Article START -->
+  <article class="post-article">
+    <section class="markdown-content"><h2 id="Paper-Summary"><a href="#Paper-Summary" class="headerlink" title="Paper Summary"></a>Paper Summary</h2><ol>
+<li>The inclusion of word bigram features gives consistent gains on sentiment analysis tasks;</li>
+<li>NB does better than SVMs on small snippet sentiment tasks. (Opposite on longer documents);</li>
+<li>A novel way: SVM using NB log-count ratios variant as feature.</li>
+<li>MNB is normally better and more stable than multivariable Bernouli NBm and binarized MNB is better than standard MNB.</li>
+</ol>
+<p><br></p>
+<h2 id="Model"><a href="#Model" class="headerlink" title="Model"></a>Model</h2><p><br></p>
+<h3 id="main-model-variants"><a href="#main-model-variants" class="headerlink" title="main model variants"></a>main model variants</h3><p>Linear classifiers: $$y^{(k)}=sign(\boldsymbol{w}^T\boldsymbol{x}^{(k)}+b)$$</p>
+<p>$\boldsymbol{f}^{(i)}\in R^{|V|}$ is the feature count vector for training case i with label $y^{(i)}\in{-1,1}$, $V$ is the set of features, $\boldsymbol{f}_j^{(i)}$  represents the number of  occurences of feature $V_j$ in training case $i$.$$\boldsymbol{p}=\alpha + \sum_{i:y^{(i)}=1}\boldsymbol{f}^{(i)}$$ and $$\boldsymbol{q}=\alpha + \sum_{i:y^{(i)}=-1}\boldsymbol{f}^{(i)}$$ for smoothing parameter $\alpha$. The log-count ratio is: </p>
+<p>$$\boldsymbol{r} = log(\frac{\boldsymbol{p/||\boldsymbol{p}||_1}}{\boldsymbol{q}/||\boldsymbol{q}||_1})$$</p>
+<p><br></p>
+<h3 id="Multinomial-Naive-Bayes"><a href="#Multinomial-Naive-Bayes" class="headerlink" title="Multinomial Naive Bayes"></a>Multinomial Naive Bayes</h3><p>Cited and expanded by <a href="https://en.wikipedia.org/wiki/Naive_Bayes_classifier" target="_blank" rel="noopener">naive bayes</a> from wikipedia.</p>
+<p>With a multinomial event model, samples (feature vectors) represent the frequencies with which certain events have been generated by a multinomial $(p_1,…,p_n)$ where $p_i$ is the probability that event i occurs. In our case, If we consider the whole documents as a word bag, the feature of one sample sentence would be the frequency of each word appears in this word bag, that will give us:</p>
+<p>$$p(\boldsymbol{x}|C_k)=\frac{(\sum_ix_i)!}{\prod_i x_i!}\prod_i p_{ki}^{x_i}$$</p>
+<p>As we see product integral here, applying log makes it become linear:</p>
+<p>$$\log p(C_k|\boldsymbol{x})\propto \log\left(p(C_k)\prod_{i=1}^np_{ki}^{x_i}\right)= \log p(C_k)+\sum_{i=1}^{n}x_i\log p_{ki}=b + \boldsymbol{w}_k^T\boldsymbol{x}$$ </p>
+<p>$b=\log p(C_k)​$ and $\boldsymbol{w}<em>{ki} = \log{p</em>{ki}}​$ </p>
+<p>Smoothing is needed because if a given class and feature value never occur together in the training data, then the frequency-based probability estimate will be zero.</p>
+<p><br></p>
+<h2 id="Application-in-Quora-Insincere-Question-Classification"><a href="#Application-in-Quora-Insincere-Question-Classification" class="headerlink" title="Application in Quora Insincere Question Classification"></a>Application in Quora Insincere Question Classification</h2><p><br></p>
+<h3 id="Theory-Explanation"><a href="#Theory-Explanation" class="headerlink" title="Theory Explanation"></a>Theory Explanation</h3><p>We are given 1306122 labeled training question texts and 56370 question texts to be predicted, all questions are classified as either Insincere or Sincere. </p>
+<p>To begin with, we want to know the probability of classification of a given sentence: $ P(Class|Sentence) $, since we only have two classes 0,1. We can determine the class by dividing them:  </p>
+<p>$$result=\frac{P(C=1|S)}{P(C=0|S)}$$  </p>
+<p>If it’s bigger than 1, the sentence should be classify as 1 (insincere), otherwise 0.<br>Or just simply compare which one’s bigger.</p>
+<p>Problem here is how to get the $P(C|S)$:<br>According to Naive Bayes,   </p>
+<p>$$P(C=1|S)=\frac{P(S|C=1)P(C=1)}{P(S)},P(C=0|S)=\frac{P(S|C=0)P(C=0)}{P(S)}$$</p>
+<p>thus,<br>$$result=\frac{P(S|C=1)}{P(S|C=0)}\frac{P(C=1)}{P(C=0)}$$  </p>
+<p>$\frac{P(C=1)}{P(C=0)}$ here is a constant, which is the fraction of counts of labeled 1 and 0 question texts.    </p>
+<p>For P(S|C=1), we consider in Naive Bayes way that every word appears independently. With this assumption, we can say   </p>
+<p>$$P(S|C=1) = P(w_1|C)P(w_2|C)P(w_3|C)…P(w_n|C)$$<br>$w_i$ is the $i$-th word in sentence $S$    </p>
+<p>Thus, all we need here is $P(w|C=1)$ and $P(w|C=0)$ for all words in the bag. For every $P(S|C)$, we can just multiply words probabilities together.  </p>
+<p>Therefore,<br>$$result=\frac{\prod_{i=0}^nP(w_i|C=1)}{\prod_{i=0}^nP(w_i|C=0)}\frac{P(C=1)}{P(C=0)}$$   </p>
+<p>Define log ratio by taking log from result:<br>$$r =\log\frac{ratio\ of\ word\ w\ in\ class\ 1}{ratio\ of\ word\ w\ in\ class\ 0}= \log\frac{\frac{\boldsymbol{p}}{||\boldsymbol{p}||}}{\frac{\boldsymbol{q}}{||\boldsymbol{q}||}} $$  </p>
+<p>$\boldsymbol{p}$ here is obtained by adding up every feature(words) in each row(sentence) who belongs to class 1, that gives us $\sum_{i=0}^nlog{P(w_i|C=1)}$. $||\boldsymbol{p}||$ is the normalization term which is $\sum_{i=0}^n P(C=1)$. Considering the smoothing term to prevent the situation that some words never appear in a particular class, $\boldsymbol{p}=\alpha + \sum_{i=0}^nlog{P(w_i|C=1)}$.<br><br></p>
+<h3 id="Brief-Implementation-Explanation"><a href="#Brief-Implementation-Explanation" class="headerlink" title="Brief Implementation Explanation"></a>Brief Implementation Explanation</h3><p>Here’s the <a href="https://github.com/MarvinLSJ/Quora_Insincere_Text_Classification/blob/master/NBSVM_baseline.ipynb" target="_blank" rel="noopener">Detailed Notebook Link</a> with explanation on how to implement the NBLR in this kaggle competition.</p>
+<p>In python where x is the feature matrix and y is the target, $\boldsymbol{p}$ equals <code>alpha + x[y==1].sum(0)</code> and $||\boldsymbol{p}||$ is <code>alpha + (y==1).sum()</code>.</p>
+<p>We can obtain the TF-IDF matrix by:</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> re, string</span><br><span class="line">re_tok = re.compile(<span class="string">f'([<span class="subst">&#123;string.punctuation&#125;</span>“”¨«»®´·º½¾¿¡§£₤‘’])'</span>)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">tokenize</span><span class="params">(s)</span>:</span> <span class="keyword">return</span> re_tok.sub(<span class="string">' '</span>, s).split()</span><br><span class="line"></span><br><span class="line">vec = TfidfVectorizer(ngram_range=(<span class="number">1</span>,<span class="number">2</span>), tokenizer=tokenize, </span><br><span class="line">                     min_df=<span class="number">3</span>, max_df=<span class="number">0.9</span>, strip_accents=<span class="string">'unicode'</span>,</span><br><span class="line">                     use_idf=<span class="number">1</span>, smooth_idf=<span class="number">1</span>, sublinear_tf=<span class="number">1</span>)</span><br><span class="line">                     </span><br><span class="line">tr_term = vec.fit_transform(X_train)</span><br><span class="line">va_term = vec.transform(X_val)</span><br><span class="line">te_term = vec.transform(test_df[<span class="string">'question_text'</span>])</span><br></pre></td></tr></table></figure>
+<p>Then built models like the paper mentioned before:</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">pr</span><span class="params">(y_i, y, alpha=<span class="number">1</span>)</span>:</span></span><br><span class="line">    p = x[y==y_i].sum(<span class="number">0</span>)+alpha</span><br><span class="line">    p_norm = (y==y_i).sum()+alpha</span><br><span class="line">    <span class="keyword">return</span> p/p_norm</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">nblr</span><span class="params">(y)</span>:</span></span><br><span class="line">    y = y.values</span><br><span class="line">    r = np.log(pr(<span class="number">1</span>,y) / pr(<span class="number">0</span>,y))</span><br><span class="line">    m = LogisticRegression(C=<span class="number">4</span>, dual=<span class="keyword">True</span>, max_iter=<span class="number">500</span>)</span><br><span class="line">    x_nb = x.multiply(r)</span><br><span class="line">    <span class="keyword">return</span> m.fit(x_nb, y), r</span><br></pre></td></tr></table></figure>
+<p>At last, we get 0.57157 F1 score for this simple baseline. There’s a lot more can be done to improve this one: </p>
+<ol>
+<li>The distribution of positive and negative samples are extremely unbalanced, we can try downsampling or data augmentation.</li>
+<li>Language preprocessing are not done, like clean up stopwords.</li>
+<li>Various linear class classifier can be applied, like SVM.</li>
+</ol>
+<p><br></p>
+<h2 id="Credit"><a href="#Credit" class="headerlink" title="Credit"></a>Credit</h2><p>Info:  2012, ACL, <a href="https://dl.acm.org/citation.cfm?id=2390688" target="_blank" rel="noopener">Paper Link</a><br>There’s an explanation about nbsvm here: <a href="https://www.kaggle.com/jhoward/nb-svm-strong-linear-baseline" target="_blank" rel="noopener">Kaggle notebook by Jeremy Howard</a><br>Some detail about its L1 norm: <a href="https://www.kaggle.com/zhangyang/explain-l1-norm-nb-svm-strong-linear-baseline" target="_blank" rel="noopener">Detail explanation by Zhangyang</a></p>
+</section>
+    <!-- Tags START -->
+    
+      <div class="tags">
+        <span>Tags:</span>
+        
+  <a href="/tags#NLP">
+    <span class="tag-code">NLP</span>
+  </a>
+
+  <a href="/tags#Competition">
+    <span class="tag-code">Competition</span>
+  </a>
+
+  <a href="/tags#Paper Reading">
+    <span class="tag-code">Paper Reading</span>
+  </a>
+
+      </div>
+    
+    <!-- Tags END -->
+    <!-- NAV START -->
+    
+  <div class="nav-container">
+    <!-- reverse left and right to put prev and next in a more logic postition -->
+    
+      <a class="nav-left" href="/2018/11/03/Steepest_Descent/">
+        <span class="nav-arrow">← </span>
+        
+          Steepest Descent
+        
+      </a>
+    
+    
+  </div>
+
+    <!-- NAV END -->
+    <!-- 打赏 START -->
+    
+      <div class="money-like">
+        <div class="reward-btn">
+          赏
+          <span class="money-code">
+            <span class="alipay-code">
+              <div class="code-image"></div>
+              <b>使用支付宝打赏</b>
+            </span>
+            <span class="wechat-code">
+              <div class="code-image"></div>
+              <b>使用微信打赏</b>
+            </span>
+          </span>
+        </div>
+        <p class="notice">若你觉得我的文章对你有帮助，欢迎点击上方按钮对我打赏</p>
+      </div>
+    
+    <!-- 打赏 END -->
+    <!-- 二维码 START -->
+    
+      <div class="qrcode">
+        <canvas id="share-qrcode"></canvas>
+        <p class="notice">扫描二维码，分享此文章</p>
+      </div>
+    
+    <!-- 二维码 END -->
+    
+      <!-- Gitment START -->
+      <div id="comments"></div>
+      <!-- Gitment END -->
+    
+  </article>
+  <!-- Article END -->
+  <!-- Catalog START -->
+  
+    <aside class="catalog-container">
+  <div class="toc-main">
+    <strong class="toc-title">Catalog</strong>
+    
+      <ol class="toc-nav"><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#Paper-Summary"><span class="toc-nav-text">Paper Summary</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#Model"><span class="toc-nav-text">Model</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#main-model-variants"><span class="toc-nav-text">main model variants</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#Multinomial-Naive-Bayes"><span class="toc-nav-text">Multinomial Naive Bayes</span></a></li></ol></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#Application-in-Quora-Insincere-Question-Classification"><span class="toc-nav-text">Application in Quora Insincere Question Classification</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#Theory-Explanation"><span class="toc-nav-text">Theory Explanation</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#Brief-Implementation-Explanation"><span class="toc-nav-text">Brief Implementation Explanation</span></a></li></ol></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#Credit"><span class="toc-nav-text">Credit</span></a></li></ol>
+    
+  </div>
+</aside>
+  
+  <!-- Catalog END -->
+</main>
+
+<script>
+  (function () {
+    var url = 'http://yoursite.com/2018/11/23/NBSVM for sentiment and topic classification/';
+    var banner = ''
+    if (banner !== '' && banner !== 'undefined' && banner !== 'null') {
+      $('#article-banner').css({
+        'background-image': 'url(' + banner + ')'
+      })
+    } else {
+      $('#article-banner').geopattern(url)
+    }
+    $('.header').removeClass('fixed-header')
+
+     // error image
+    $(".markdown-content img").on('error', function() {
+      $(this).attr('src', 'http://file.muyutech.com/error-img.png')
+      $(this).css({
+        'cursor': 'default'
+      })
+    })
+
+    // zoom image
+    $(".markdown-content img").on('click', function() {
+      var src = $(this).attr('src')
+      if (src !== 'http://file.muyutech.com/error-img.png') {
+        var imageW = $(this).width()
+        var imageH = $(this).height()
+        
+        var zoom = ($(window).width() * 0.95 / imageW).toFixed(2)
+        zoom = zoom < 1 ? 1 : zoom
+        zoom = zoom > 2 ? 2 : zoom
+        var transY = (($(window).height() - imageH) / 2).toFixed(2)
+
+        $('body').append('<div class="image-view-wrap"><div class="image-view-inner"><img src="'+ src +'" /></div></div>')
+        $('.image-view-wrap').addClass('wrap-active')
+        $('.image-view-wrap img').css({
+          'width': `${imageW}`,
+          'transform': `translate3d(0, ${transY}px, 0) scale3d(${zoom}, ${zoom}, 1)`
+        })
+        $('html').css('overflow', 'hidden')
+
+        $('.image-view-wrap').on('click', function() {
+          $(this).remove()
+          $('html').attr('style', '')
+        })
+      }
+    })
+
+    // qrcode
+    var qr = new QRious({
+      element: document.getElementById('share-qrcode'),
+      value: document.location.href
+    });
+
+    // gitment
+    var gitmentConfig = "MarvinLSJ";
+    if (gitmentConfig !== 'undefined') {
+      var gitment = new Gitment({
+        id: "NBSVM for sentiment and topic classification",
+        owner: "MarvinLSJ",
+        repo: "marvinlsj.github.io",
+        oauth: {
+          client_id: "3905cc98028f883d11e3",
+          client_secret: "67bbb168f8a05e89248865dba4dcdd684072f5af"
+        },
+        theme: {
+          render(state, instance) {
+            const container = document.createElement('div')
+            container.lang = "en-US"
+            container.className = 'gitment-container gitment-root-container'
+            container.appendChild(instance.renderHeader(state, instance))
+            container.appendChild(instance.renderEditor(state, instance))
+            container.appendChild(instance.renderComments(state, instance))
+            container.appendChild(instance.renderFooter(state, instance))
+            return container;
+          }
+        }
+      })
+      gitment.render(document.getElementById('comments'))
+    }
+  })();
+</script>
+
+<script>
+  var disqus_shortname = '';
+  
+  var disqus_url = 'http://yoursite.com/2018/11/23/NBSVM for sentiment and topic classification/';
+  
+  (function(){
+    var dsq = document.createElement('script');
+    dsq.type = 'text/javascript';
+    dsq.async = true;
+    dsq.src = '//go.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+  })();
+</script>
+
+    <div class="scroll-top">
+  <span class="arrow-icon"></span>
+</div>
+    <footer class="app-footer">
+  <p class="copyright">
+    &copy; 2018 | Proudly powered by <a href="https://hexo.io" target="_blank">Hexo</a>
+    <br>
+    Theme by <a href="https://github.com/yanm1ng">yanm1ng</a>
+  </p>
+</footer>
+
+<script>
+  function async(u, c) {
+    var d = document, t = 'script',
+      o = d.createElement(t),
+      s = d.getElementsByTagName(t)[0];
+    o.src = u;
+    if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+    s.parentNode.insertBefore(o, s);
+  }
+</script>
+<script>
+  async("//cdn.bootcss.com/fastclick/1.0.6/fastclick.min.js", function(){
+    FastClick.attach(document.body);
+  })
+</script>
+
+<script>
+  var hasLine = 'true';
+  async("//cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js", function(){
+    $('figure pre').each(function(i, block) {
+      var figure = $(this).parents('figure');
+      if (hasLine === 'false') {
+        figure.find('.gutter').hide();
+      }
+      var lang = figure.attr('class').split(' ')[1] || 'code';
+      var codeHtml = $(this).html();
+      var codeTag = document.createElement('code');
+      codeTag.className = lang;
+      codeTag.innerHTML = codeHtml;
+      $(this).attr('class', '').empty().html(codeTag);
+      figure.attr('data-lang', lang.toUpperCase());
+      hljs.highlightBlock(block);
+    });
+  })
+</script>
+<!-- Baidu Tongji -->
+
+<script src="/js/script.js"></script>
+  </body>
+</html>
